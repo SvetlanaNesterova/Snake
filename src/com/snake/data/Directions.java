@@ -1,4 +1,4 @@
-package com.snake;
+package com.snake.data;
 
 public enum Directions {
     Up,
