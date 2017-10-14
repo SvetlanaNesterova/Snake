@@ -3,7 +3,7 @@ package com.snake.data.cell;
 public abstract class Cell {
     private int x;
     private int y;
-    private boolean isWalkable;
+    protected static boolean isWalkable;
 
     public Cell(int x, int y){
         this.x = x;
@@ -30,9 +30,4 @@ public abstract class Cell {
     public void setY(int y){
         this.y = y;
     }
-
-    public void setIsWalkable(boolean isWalkable){
-        this.isWalkable = isWalkable;
-    }
-
 }

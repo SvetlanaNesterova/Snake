@@ -11,7 +11,7 @@ public class SnakePart extends Cell {
 
     public SnakePart(int x, int y, Directions direction){
         super(x, y);
-        setIsWalkable(false);
+        isWalkable = false;
         this.direction = direction;
     }
 
