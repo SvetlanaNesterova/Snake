@@ -3,7 +3,7 @@ package com.snake.data.cell;
 import com.snake.data.Directions;
 
 public class SnakePart extends Cell {
-    private Directions direction;
+    private Directions direction = null;
 
     public SnakePart(int x, int y) {
         super(x, y);
@@ -19,7 +19,7 @@ public class SnakePart extends Cell {
         return direction;
     }
 
-    protected void setDirection(Directions direction) {
+    public void setDirection(Directions direction) {
         this.direction = direction;
     }
 }

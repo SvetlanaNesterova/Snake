@@ -5,28 +5,23 @@ import com.snake.data.cell.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class TextParser {
 
-    private HashMap<Character, Cell> fromSymToCell;
-    private FunctionThreeArgs<Cell, Integer, Integer, Cell> convert;
+    private HashMap<Character, FunctionTwoArgs<Integer, Integer, Cell>> fromSymToCell;
 
     public TextParser(){
         fromSymToCell = new HashMap<>();
-        fromSymToCell.put('#', new Wall(0, 0));
-        fromSymToCell.put('~', new Empty(0, 0));
-        fromSymToCell.put('$', new SnakePart(0, 0));
-        fromSymToCell.put('S', new SnakeHead(0, 0));
-        fromSymToCell.put('a', new Apple(0, 0));
-        convert = (c, x, y) -> {
-            c.setX(x);
-            c.setY(y);
-            return c;
-        };
+        fromSymToCell.put('#', Wall::new);
+        fromSymToCell.put('~', Empty::new);
+        fromSymToCell.put('$', SnakePart::new);
+        fromSymToCell.put('S', SnakeHead::new);
+        fromSymToCell.put('a', Apple::new);
     }
 
-    public interface FunctionThreeArgs<T1, T2, T3, R>{
-        R apply(T1 t1, T2 t2, T3 t3);
+    public interface FunctionTwoArgs<T1, T2, R>{
+        R apply(T1 t1, T2 t2);
     }
 
     public Cell[][] parseTextField(String filename) throws Exception{
@@ -36,13 +31,9 @@ public class TextParser {
             String currentString = textField.get(i);
             field[i] = new Cell[currentString.length()];
             for (int j=0; j<currentString.length(); j++)
-                field[i][j] = getCellFromSymbol(currentString.charAt(j), i, j);
+                field[i][j] = fromSymToCell.get(currentString.charAt(j)).apply(i, j);
         }
         return field;
-    }
-
-    private Cell getCellFromSymbol(char symbol, int i, int j) {
-        return convert.apply(fromSymToCell.get(symbol), i, j);
     }
 
     private static ArrayList<String> readFile(String filename) throws FileNotFoundException{

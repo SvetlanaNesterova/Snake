@@ -19,7 +19,7 @@ public abstract class Cell {
         return y;
     }
 
-    public boolean getIsWalkable(){
+    public boolean isWalkable(){
         return isWalkable;
     }
 
@@ -29,5 +29,14 @@ public abstract class Cell {
 
     public void setY(int y){
         this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() +
+                "{" +
+                "x=" + y +
+                ", y=" + x +
+                '}';
     }
 }
