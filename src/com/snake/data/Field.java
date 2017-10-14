@@ -10,8 +10,9 @@ public class Field {
     private static Cell[][] field;
 
     public Field(String filename){
+        TextParser tp = new TextParser();
         try {
-            field = parseTextField(filename);
+            field = tp.parseTextField(filename);
         }catch (Exception e){
             System.out.println("Incorrect filename");
         }
@@ -27,10 +28,9 @@ public class Field {
 
     public SnakeHead findSnakeHead(){
         for (int i=0; i<=field.length; i++){
-            for (int j=0; j<field[i].length; j++){
+            for (int j=0; j<field[i].length; j++)
                 if (field[i][j] instanceof SnakeHead)
                     return (SnakeHead)field[i][j];
-            }
         }
         return null;
     }
@@ -61,65 +61,10 @@ public class Field {
             int newX = newCell.getX();
             int newY = newCell.getY();
             newCell = field[x][y];
-            newCell.setX(newX);
-            newCell.setY(newY);
             field[x][y] = new Empty(x, y);
         }else{
             throw new Exception("The cell" + x + " " + y + " " + field[x][y].getClass() + " cannot be moved");
         }
-    }
-
-    private Cell[][] parseTextField(String filename) throws Exception{
-        ArrayList<String> textField = readFile(filename);
-        Cell[][] field = new Cell[textField.size()][];
-        for (int i=0; i<textField.size(); i++){
-            String currentString = textField.get(i);
-            for (int j=0; j<currentString.length(); j++)
-                field[i][j] = getCellFromSymbol(currentString.charAt(j), i, j);
-        }
-        return field;
-    }
-
-    private Cell getCellFromSymbol(char symbol, int i, int j) {
-        switch (symbol) {
-            case '#':
-                return new Wall(i, j);
-            case '~':
-                return new Empty(i, j);
-            case '$':
-                return new SnakePart(i, j);
-            case 'S':
-                return new SnakeHead(i, j);
-            case 'a':
-                return new Apple(i, j);
-            default:
-                return null;
-        }
-    }
-
-    private static ArrayList<String> readFile(String filename) throws Exception{
-        exists(filename);
-        File file = new File(filename);
-        ArrayList<String> fileStrings = new ArrayList<>();
-        try{
-            BufferedReader in = new BufferedReader(new FileReader(file.getAbsoluteFile()));
-            try{
-                String s;
-                while ((s = in.readLine()) != null)
-                    fileStrings.add(s);
-            } finally {
-                in.close();
-            }
-        } catch (IOException e){
-            throw new RuntimeException();
-        }
-        return fileStrings;
-    }
-
-    private static void exists(String filename) throws FileNotFoundException{
-        File file = new File(filename);
-        if (!file.exists())
-            throw new FileNotFoundException(file.getName());
     }
 
 }

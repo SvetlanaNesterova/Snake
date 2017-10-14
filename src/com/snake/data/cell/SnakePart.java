@@ -1,7 +1,6 @@
 package com.snake.data.cell;
 
 import com.snake.data.Directions;
-import com.snake.data.Cell;
 
 public class SnakePart extends Cell {
     private Directions direction;

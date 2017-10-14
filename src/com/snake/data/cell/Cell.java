@@ -1,4 +1,4 @@
-package com.snake.data;
+package com.snake.data.cell;
 
 public abstract class Cell {
     private int x;
@@ -23,15 +23,15 @@ public abstract class Cell {
         return isWalkable;
     }
 
-    protected void setX(int x){
+    public void setX(int x){
         this.x = x;
     }
 
-    protected void setY(int y){
+    public void setY(int y){
         this.y = y;
     }
 
-    protected void setIsWalkable(boolean isWalkable){
+    public void setIsWalkable(boolean isWalkable){
         this.isWalkable = isWalkable;
     }
 
