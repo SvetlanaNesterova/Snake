@@ -35,8 +35,8 @@ public abstract class Cell {
     public String toString() {
         return this.getClass().getSimpleName() +
                 "{" +
-                "x=" + y +
-                ", y=" + x +
+                "x=" + x +
+                ", y=" + y +
                 '}';
     }
 }
