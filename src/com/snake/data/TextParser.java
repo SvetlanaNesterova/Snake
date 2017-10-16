@@ -25,13 +25,12 @@ public class TextParser {
     }
 
     public Cell[][] parseTextField(String filename) throws Exception{
-        ArrayList<String> textField = readFile(filename);
-        Cell[][] field = new Cell[textField.size()][];
-        for (int i=0; i<textField.size(); i++){
-            String currentString = textField.get(i);
-            field[i] = new Cell[currentString.length()];
-            for (int j=0; j<currentString.length(); j++)
-                field[i][j] = fromSymToCell.get(currentString.charAt(j)).apply(i, j);
+        ArrayList<String> fileStrings = readFile(filename);
+        Cell[][] field = new Cell[fileStrings.get(0).length()][];
+        for (int i=0; i<fileStrings.get(0).length(); i++){
+            field[i] = new Cell[fileStrings.size()];
+            for (int j=0; j<fileStrings.size(); j++)
+                field[i][j] = fromSymToCell.get(fileStrings.get(j).charAt(i)).apply(i, j);
         }
         return field;
     }
