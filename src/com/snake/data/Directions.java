@@ -3,10 +3,10 @@ package com.snake.data;
 import java.util.ArrayList;
 
 public enum Directions {
-    Up(new Vector(-1, 0)),
-    Down(new Vector(1, 0)),
-    Left(new Vector(0, -1)),
-    Right(new Vector(0, 1));
+    Up(new Vector(0, -1)),
+    Down(new Vector(0, 1)),
+    Left(new Vector(-1, 0)),
+    Right(new Vector(1, 0));
 
     private Vector vector;
     public static final Directions[] VALUES = Directions.values();
