@@ -5,7 +5,7 @@ import com.snake.data.cell.*;
 import java.util.ArrayList;
 
 public class Field {
-    private static Cell[][] field;
+    private Cell[][] field;
     private int height;
     private int width;
 

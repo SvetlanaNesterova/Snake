@@ -3,6 +3,7 @@ package com.snake;
 import com.snake.data.Field;
 import com.snake.data.TextParser;
 import com.snake.data.cell.Cell;
+import javafx.stage.Stage;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,6 +16,5 @@ public class Main {
             return;
         }
         Game game = new Game(field);
-
     }
 }
