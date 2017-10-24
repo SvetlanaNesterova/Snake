@@ -1,8 +1,6 @@
-package com.snake.data;
+package com.snake.main.data;
 
-import com.snake.data.cell.*;
-
-import java.util.ArrayList;
+import com.snake.main.data.cell.*;
 
 public class Field {
     private Cell[][] field;
@@ -17,10 +15,6 @@ public class Field {
 
     public Cell[][] getField(){
         return field;
-    }
-
-    protected void setField(Cell[][] field){
-        this.field = field;
     }
 
     public int getHeight() {

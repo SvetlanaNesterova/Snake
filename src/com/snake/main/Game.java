@@ -1,8 +1,8 @@
-package com.snake;
+package com.snake.main;
 
-import com.snake.data.Field;
-import com.snake.data.Snake;
-import com.snake.data.cell.Cell;
+import com.snake.main.data.Field;
+import com.snake.main.data.Snake;
+import com.snake.main.data.cell.Cell;
 
 public class Game {
     private Field field;

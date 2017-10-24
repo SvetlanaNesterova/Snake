@@ -1,23 +1,15 @@
-package com.snake;
+package com.snake.main;
 
-import com.snake.data.Field;
-import com.snake.data.TextParser;
-import com.snake.data.cell.Cell;
+import com.snake.main.data.TextParser;
+import com.snake.main.data.cell.Cell;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
-
-import javax.swing.*;
-
-import static javax.swing.GroupLayout.*;
 
 public class GameForm extends Application {
 

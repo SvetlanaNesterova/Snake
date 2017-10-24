@@ -1,6 +1,4 @@
-package com.snake.data;
-
-import java.util.ArrayList;
+package com.snake.main.data;
 
 public enum Directions {
     Up(new Vector(0, -1)),

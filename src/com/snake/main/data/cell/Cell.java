@@ -1,4 +1,4 @@
-package com.snake.data.cell;
+package com.snake.main.data.cell;
 
 public abstract class Cell {
     private int x;

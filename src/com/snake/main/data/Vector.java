@@ -1,4 +1,4 @@
-package com.snake.data;
+package com.snake.main.data;
 
 public final class Vector {
     private final int x;

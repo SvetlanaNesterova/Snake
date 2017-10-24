@@ -1,9 +1,7 @@
-package com.snake;
+package com.snake.main;
 
-import com.snake.data.Field;
-import com.snake.data.TextParser;
-import com.snake.data.cell.Cell;
-import javafx.stage.Stage;
+import com.snake.main.data.TextParser;
+import com.snake.main.data.cell.Cell;
 
 public class Main {
     public static void main(String[] args) {

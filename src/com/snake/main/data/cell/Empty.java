@@ -1,4 +1,4 @@
-package com.snake.data.cell;
+package com.snake.main.data.cell;
 
 public class Empty extends Cell {
     public Empty(int x, int y) {

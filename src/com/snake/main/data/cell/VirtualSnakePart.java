@@ -1,6 +1,6 @@
-package com.snake.data.cell;
+package com.snake.main.data.cell;
 
-import com.snake.data.Directions;
+import com.snake.main.data.Directions;
 
 public class VirtualSnakePart extends SnakePart {
     public VirtualSnakePart(int x, int y, Directions direction) {

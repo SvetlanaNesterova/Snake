@@ -1,8 +1,7 @@
-package com.snake.data;
+package com.snake.main.data;
 
-import com.snake.data.cell.*;
+import com.snake.main.data.cell.*;
 
-import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
 
 public class Snake {
@@ -13,14 +12,6 @@ public class Snake {
     public Snake(Field field) {
         this.field = field;
         this.snakeParts = findSnake();
-    }
-
-    public ArrayList<SnakePart> getSnakeParts() {
-        return snakeParts;
-    }
-
-    protected void setSnakeParts(ArrayList<SnakePart> snakeParts){
-        this.snakeParts = snakeParts;
     }
 
     public boolean isDead(){
@@ -60,8 +51,10 @@ public class Snake {
         SnakePart currentPart = head;
         for (Directions direction : Directions.VALUES){
             Cell cell = field.getNeighbor(head, direction);
-            if (cell instanceof SnakePart)
+            if (cell instanceof SnakePart) {
+                assert head != null;
                 head.setDirection(direction.opposite());
+            }
         }
         while (currentPart != null){
             snake.add(currentPart);
