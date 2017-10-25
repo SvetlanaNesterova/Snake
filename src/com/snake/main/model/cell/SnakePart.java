@@ -1,18 +1,21 @@
-package com.snake.main.data.cell;
+package com.snake.main.model.cell;
 
-import com.snake.main.data.Directions;
+import com.snake.main.model.Directions;
 
 public class SnakePart extends Cell {
-    private Directions direction = null;
+    protected Directions direction = null;
+    protected int position = -1;
 
     public SnakePart(int x, int y) {
         super(x, y);
+        name = "SnakePart";
     }
 
     public SnakePart(int x, int y, Directions direction){
         super(x, y);
         isWalkable = false;
         this.direction = direction;
+        name = "SnakePart";
     }
 
     public Directions getDirection() {
@@ -21,5 +24,13 @@ public class SnakePart extends Cell {
 
     public void setDirection(Directions direction) {
         this.direction = direction;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

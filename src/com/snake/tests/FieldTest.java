@@ -1,9 +1,10 @@
 package com.snake.tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class FieldTest {
-    @org.junit.jupiter.api.Test
+
+    @Test
     void getNeighbor() {
     }
 

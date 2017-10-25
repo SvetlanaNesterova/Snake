@@ -1,4 +1,4 @@
-package com.snake.main.data.cell;
+package com.snake.main.model.cell;
 
 import java.util.HashMap;
 

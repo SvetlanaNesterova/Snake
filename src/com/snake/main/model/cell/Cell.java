@@ -1,14 +1,19 @@
-package com.snake.main.data.cell;
+package com.snake.main.model.cell;
 
 public abstract class Cell {
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
     protected boolean isWalkable;
+    protected String name;
 
     public Cell(int x, int y){
         this.x = x;
         this.y = y;
         isWalkable = false;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getX(){

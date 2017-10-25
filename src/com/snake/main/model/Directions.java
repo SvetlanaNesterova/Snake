@@ -1,4 +1,4 @@
-package com.snake.main.data;
+package com.snake.main.model;
 
 public enum Directions {
     Up(new Vector(0, -1)),
@@ -7,7 +7,6 @@ public enum Directions {
     Right(new Vector(1, 0));
 
     private Vector vector;
-    public static final Directions[] VALUES = Directions.values();
 
     Directions(Vector vector){
         this.vector = vector;
@@ -34,5 +33,9 @@ public enum Directions {
                 break;
         }
         return direction;
+    }
+
+    public boolean isOpposite(Directions other) {
+        return this.opposite() == other;
     }
 }
