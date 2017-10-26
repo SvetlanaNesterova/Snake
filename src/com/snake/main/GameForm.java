@@ -3,6 +3,7 @@ package com.snake.main;
 import com.snake.main.model.Directions;
 import com.snake.main.model.Field;
 import com.snake.main.model.Snake;
+import com.snake.main.model.Vector;
 import com.snake.main.model.cell.*;
 
 import javax.swing.*;
@@ -165,6 +166,8 @@ public class GameForm extends JPanel{
             else if (key == KeyEvent.VK_DOWN) {
                 direction = Directions.Down;
             }
+            if (direction == null)
+                direction = snake.getSnakeDirection();
             if (direction.isOpposite(snake.getSnakeDirection()))
                 return;
             snake.changeHeadDirection(direction);
