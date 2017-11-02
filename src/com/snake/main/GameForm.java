@@ -34,6 +34,7 @@ public class GameForm extends JPanel{
     private int fieldWidth;
     private int fieldHeight;
     private Snake snake;
+    private JFrame window;
 
 
     public GameForm(){
@@ -44,7 +45,7 @@ public class GameForm extends JPanel{
         RepaintAction action = new RepaintAction();
         Timer timer = new Timer(SPEED, action);
         timer.start();
-        JFrame window = new JFrame("Snake");
+        window = new JFrame("Snake");
         ImageIcon icon = new ImageIcon("src\\com\\snake\\assets\\snake.png");
         window.setIconImage(icon.getImage());
         window.addKeyListener(new Listener());
@@ -133,6 +134,7 @@ public class GameForm extends JPanel{
     private class RepaintAction implements ActionListener{
         public void actionPerformed(ActionEvent evt) {
             game.makeStep();
+            window.setTitle("Score: " + game.getScore());
             if (game.isOver()) {
                 JOptionPane.showMessageDialog(null,
                         "YOUR SNAKE IS DEAD\nSHAMEFUL DISPLAY", "EPIC FAIL", JOptionPane.ERROR_MESSAGE);

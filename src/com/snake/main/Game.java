@@ -10,6 +10,7 @@ public class Game {
     private Field field;
     private Snake snake;
     private boolean isOver;
+    private int score = -1;
 
     public Game(Cell[][] field){
         this.field = new Field(field);
@@ -19,8 +20,10 @@ public class Game {
     public void makeStep(){
         snake.makeMove();
         isOver = snake.isDead();
-        if (!field.hasApple)
+        if (!field.hasApple) {
             addApple();
+            score++;
+        }
     }
 
     private void addApple() {
@@ -45,4 +48,6 @@ public class Game {
     public boolean isOver() {
         return isOver;
     }
+
+    public int getScore() { return score; }
 }
