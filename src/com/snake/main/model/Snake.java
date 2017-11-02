@@ -82,7 +82,9 @@ public class Snake {
     private void moveSnakePart(SnakePart part, int index) {
         Directions direction = part.getDirection();
         Cell targetCell = field.getNeighbor(part, direction);
-        if (!targetCell.isWalkable())
+        if (!targetCell.isWalkable()
+                && (!(targetCell instanceof SnakePart)
+                    || ((SnakePart) targetCell).getPosition() - part.getPosition() > 1))
             isDead = true;
         else {
             if (targetCell instanceof Apple) {
