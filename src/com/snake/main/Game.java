@@ -10,8 +10,10 @@ import java.util.Random;
 public class Game {
     private Field field;
     private Snake snake;
+    private Apple apple;
     private boolean isOver;
     private int score;
+    private int ticks;
 
     public Game(){
         createNewLevel();
@@ -23,7 +25,14 @@ public class Game {
         if (!field.hasApple) {
             addApple();
             score++;
+            ticks = 0;
         }
+        if (ticks > 50) {
+            ticks = 0;
+            removeApple();
+            addApple();
+        }
+        ticks++;
     }
 
     private void addApple() {
@@ -34,7 +43,15 @@ public class Game {
             y = random.nextInt(field.getHeight());
         }
         field.setCellAt(x, y, new Apple(x, y));
+        apple = (Apple) field.cellAt(x, y);
         field.hasApple = true;
+    }
+
+    private void removeApple() {
+        int x = apple.getX();
+        int y = apple.getY();
+        field.setCellAt(x, y, new Empty(x, y));
+        score--;
     }
 
     public void createNewLevel() {
@@ -74,6 +91,10 @@ public class Game {
     public Snake getSnake() {
         return snake;
     }
+
+    public Apple getApple() { return apple; }
+
+    public int getTicks() { return ticks; }
 
     public boolean isOver() {
         return isOver;

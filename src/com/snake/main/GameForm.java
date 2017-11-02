@@ -20,6 +20,7 @@ public class GameForm extends JPanel{
     private final static Color BACKGROUND_COLOR1 = new Color(0xD9D2FF);
     private final static Color BACKGROUND_COLOR2 = new Color(0xD3CBF0);
     private final static Color APPLE_COLOR = new Color(0xFF2141);
+    private final static Color APPLE_ROTTEN_COLOR = new Color(0x3E1E0D);
     private final static Color WALL_COLOR = new Color(0x023A4F);
 
     private Game game;
@@ -63,7 +64,7 @@ public class GameForm extends JPanel{
                         drawCell(g2, i, j, getSnakeColor((SnakePart) game.getField().cellAt(i, j)));
                         break;
                     case "Apple":
-                        drawCell(g2, i, j, APPLE_COLOR);
+                        drawCell(g2, i, j, getAppleColor());
                         break;
                     case "Wall":
                         drawCell(g2, i, j, WALL_COLOR);
@@ -90,6 +91,19 @@ public class GameForm extends JPanel{
                 (tailColors[1] - headColors[1]) / game.getSnake().getLength() * position + headColors[1],
                 (tailColors[2] - headColors[2]) / game.getSnake().getLength() * position + headColors[2]
                 );
+    }
+
+    private Color getAppleColor() {
+        final int ticksCount = 50;
+        float[] rottenColors = new float[3];
+        float[] normalColors = new float[3];
+        APPLE_COLOR.getRGBColorComponents(normalColors);
+        APPLE_ROTTEN_COLOR.getRGBColorComponents(rottenColors);
+        return new Color(
+                (rottenColors[0] - normalColors[0]) / ticksCount * game.getTicks() + normalColors[0],
+                (rottenColors[1] - normalColors[1]) / ticksCount * game.getTicks() + normalColors[1],
+                (rottenColors[2] - normalColors[2]) / ticksCount * game.getTicks() + normalColors[2]
+        );
     }
 
     private class RepaintAction implements ActionListener{
