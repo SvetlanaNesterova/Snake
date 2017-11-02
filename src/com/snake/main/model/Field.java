@@ -6,7 +6,7 @@ public class Field {
     private Cell[][] field;
     private int height;
     private int width;
-    public boolean hasApple = false;
+    public boolean hasApple = true;
 
     public Field(Cell[][] field){
         this.field = field;

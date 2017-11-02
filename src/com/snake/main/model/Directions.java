@@ -1,5 +1,7 @@
 package com.snake.main.model;
 
+import java.util.Random;
+
 public enum Directions {
     Up(new Vector(0, -1)),
     Down(new Vector(0, 1)),
@@ -37,5 +39,11 @@ public enum Directions {
 
     public boolean isOpposite(Directions other) {
         return this.opposite() == other;
+    }
+
+    public static Directions random() {
+        Random rnd = new Random();
+        int result = rnd.nextInt(4);
+        return Directions.values()[result];
     }
 }

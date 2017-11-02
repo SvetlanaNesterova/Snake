@@ -1,18 +1,11 @@
 package com.snake.main;
 
 import com.snake.main.model.Directions;
-import com.snake.main.model.Field;
-import com.snake.main.model.Snake;
-import com.snake.main.model.Vector;
 import com.snake.main.model.cell.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Random;
+import java.awt.event.*;
 
 public class GameForm extends JPanel{
 
@@ -20,7 +13,7 @@ public class GameForm extends JPanel{
     private final static int CELL_SIZE = 30;
     private final static int WIDTH_SHIFT = 18;
     private final static int HEIGHT_SHIFT = 47;
-    private final static int BORDER = 1;
+    private final static int BORDER = 0;
 
     private final static Color SNAKE_COLOR = new Color(45,219,22);
     private final static Color SNAKE_HEAD_COLOR = new Color(0x26AB84);
@@ -30,21 +23,20 @@ public class GameForm extends JPanel{
     private final static Color WALL_COLOR = new Color(0x023A4F);
 
     private Game game;
-    private Field field;
     private int fieldWidth;
     private int fieldHeight;
-    private Snake snake;
     private JFrame window;
+    private Timer timer;
+    private Directions nextSnakeDirection;
 
 
     public GameForm(){
-        createNewLevel();
-
+        game = new Game();
+        fieldWidth = game.getField().getWidth();
+        fieldHeight = game.getField().getHeight();
         setBackground(BACKGROUND_COLOR1);
-
         RepaintAction action = new RepaintAction();
-        Timer timer = new Timer(SPEED, action);
-        timer.start();
+        timer = new Timer(SPEED, action);
         window = new JFrame("Snake");
         ImageIcon icon = new ImageIcon("src\\com\\snake\\assets\\snake.png");
         window.setIconImage(icon.getImage());
@@ -57,49 +49,18 @@ public class GameForm extends JPanel{
         window.requestFocusInWindow();
     }
 
-    private void createNewLevel() {
-        int gameSize = 20;
-        Cell[][] cells = new Cell[gameSize][gameSize];
-        /*TextParser tp = new TextParser();
-        try {
-            cells = tp.parseTextField("Level.txt");
-        }catch (Exception e){
-            System.out.println("Incorrect filename");
-            return;
-        }*/
-        for (int i=0; i<gameSize; i++){
-            for (int j=0; j<gameSize; j++) {
-                cells[i][j] = new Empty(i, j);
-                if (i == 0 || j == 0 || i == gameSize - 1 || j == gameSize - 1)
-                    cells[i][j] = new Wall(i, j);
-            }
-        }
-        Random random = new Random();
-        int x = 0, y = 0;
-        while (!(cells[x][y] instanceof Empty)) {
-            x = random.nextInt(gameSize - gameSize / 2) + gameSize / 4;
-            y = random.nextInt(gameSize - gameSize / 2) + gameSize / 4;
-        }
-        cells[x][y] = new SnakeHead(x, y);
-        game = new Game(cells);
-        field = game.getField();
-        fieldWidth = field.getWidth();
-        fieldHeight = field.getHeight();
-        snake = game.getSnake();
-    }
-
     protected void paintComponent(Graphics g) {
 
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        for (int i = 0; i< field.getWidth(); i++)
-            for (int j = 0; j< field.getHeight(); j++){
-                switch (field.cellAt(i, j).getName()){
+        for (int i = 0; i< game.getField().getWidth(); i++)
+            for (int j = 0; j< game.getField().getHeight(); j++){
+                switch (game.getField().cellAt(i, j).getName()){
                     case "SnakeHead":
                         drawCell(g2, i, j, SNAKE_HEAD_COLOR);
                         break;
                     case "SnakePart":
-                        drawCell(g2, i, j, getSnakeColor((SnakePart) field.cellAt(i, j)));
+                        drawCell(g2, i, j, getSnakeColor((SnakePart) game.getField().cellAt(i, j)));
                         break;
                     case "Apple":
                         drawCell(g2, i, j, APPLE_COLOR);
@@ -125,20 +86,22 @@ public class GameForm extends JPanel{
         SNAKE_COLOR.getRGBColorComponents(tailColors);
         SNAKE_HEAD_COLOR.getRGBColorComponents(headColors);
         return new Color(
-                (tailColors[0] - headColors[0]) / snake.getLength() * position + headColors[0],
-                (tailColors[1] - headColors[1]) / snake.getLength() * position + headColors[1],
-                (tailColors[2] - headColors[2]) / snake.getLength() * position + headColors[2]
+                (tailColors[0] - headColors[0]) / game.getSnake().getLength() * position + headColors[0],
+                (tailColors[1] - headColors[1]) / game.getSnake().getLength() * position + headColors[1],
+                (tailColors[2] - headColors[2]) / game.getSnake().getLength() * position + headColors[2]
                 );
     }
 
     private class RepaintAction implements ActionListener{
         public void actionPerformed(ActionEvent evt) {
+            game.getSnake().changeHeadDirection(nextSnakeDirection);
             game.makeStep();
             window.setTitle("Score: " + game.getScore());
             if (game.isOver()) {
+                timer.stop();
                 JOptionPane.showMessageDialog(null,
                         "YOUR SNAKE IS DEAD\nSHAMEFUL DISPLAY", "EPIC FAIL", JOptionPane.ERROR_MESSAGE);
-                createNewLevel();
+                game.createNewLevel();
             }
             repaint();
         }
@@ -153,6 +116,9 @@ public class GameForm extends JPanel{
 
         @Override
         public void keyPressed(KeyEvent e) {
+            if (!timer.isRunning())
+                timer.start();
+
             int key = e.getKeyCode();
             Directions direction = null;
 
@@ -168,11 +134,20 @@ public class GameForm extends JPanel{
             else if (key == KeyEvent.VK_DOWN) {
                 direction = Directions.Down;
             }
-            if (direction == null)
-                direction = snake.getSnakeDirection();
-            if (direction.isOpposite(snake.getSnakeDirection()))
+            else if (key == KeyEvent.VK_F1) {
+                game.createNewLevel();
+                timer.stop();
+                repaint();
                 return;
-            snake.changeHeadDirection(direction);
+            }
+            else if (key == KeyEvent.VK_F2) {
+                window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+            }
+            if (direction == null)
+                direction = game.getSnake().getSnakeDirection();
+            if (direction.isOpposite(game.getSnake().getSnakeDirection()))
+                return;
+            nextSnakeDirection = direction;
         }
 
         @Override
