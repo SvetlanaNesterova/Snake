@@ -14,6 +14,7 @@ public class Game {
     private boolean isOver;
     private int score;
     private int ticks;
+    public final static int TICKS_TO_ROT = 25;
 
     public Game(){
         createNewLevel();
@@ -27,7 +28,7 @@ public class Game {
             score++;
             ticks = 0;
         }
-        if (ticks > 50) {
+        if (ticks > TICKS_TO_ROT) {
             ticks = 0;
             removeApple();
             addApple();

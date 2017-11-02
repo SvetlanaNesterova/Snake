@@ -94,7 +94,7 @@ public class GameForm extends JPanel{
     }
 
     private Color getAppleColor() {
-        final int ticksCount = 50;
+        final int ticksCount = Game.TICKS_TO_ROT;
         float[] rottenColors = new float[3];
         float[] normalColors = new float[3];
         APPLE_COLOR.getRGBColorComponents(normalColors);
