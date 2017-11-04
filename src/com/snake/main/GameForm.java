@@ -112,13 +112,18 @@ public class GameForm extends JPanel{
             game.makeStep();
             window.setTitle("Score: " + game.getScore());
             if (game.isOver()) {
-                timer.stop();
                 JOptionPane.showMessageDialog(null,
                         "YOUR SNAKE IS DEAD\nSHAMEFUL DISPLAY", "EPIC FAIL", JOptionPane.ERROR_MESSAGE);
-                game.createNewLevel();
+                startNewGame();
             }
             repaint();
         }
+    }
+
+    private void startNewGame() {
+        timer.stop();
+        game.createNewLevel();
+        repaint();
     }
 
     private class Listener implements KeyListener{
@@ -130,11 +135,14 @@ public class GameForm extends JPanel{
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (!timer.isRunning())
-                timer.start();
-
             int key = e.getKeyCode();
             Directions direction = null;
+
+            if (!timer.isRunning()) {
+                timer.start();
+                if (key == KeyEvent.VK_F2)
+                    return;
+            }
 
             if (key == KeyEvent.VK_LEFT) {
                 direction = Directions.Left;
@@ -149,12 +157,14 @@ public class GameForm extends JPanel{
                 direction = Directions.Down;
             }
             else if (key == KeyEvent.VK_F1) {
-                game.createNewLevel();
-                timer.stop();
-                repaint();
+                startNewGame();
                 return;
             }
             else if (key == KeyEvent.VK_F2) {
+                timer.stop();
+                return;
+            }
+            else if (key == KeyEvent.VK_ESCAPE) {
                 window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
             }
             if (direction == null)

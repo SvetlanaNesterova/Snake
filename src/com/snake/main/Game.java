@@ -82,6 +82,7 @@ public class Game {
         snake = new Snake(field);
         isOver = false;
         score = 0;
+        ticks = 0;
         addApple();
     }
 
@@ -92,8 +93,6 @@ public class Game {
     public Snake getSnake() {
         return snake;
     }
-
-    public Apple getApple() { return apple; }
 
     public int getTicks() { return ticks; }
 
