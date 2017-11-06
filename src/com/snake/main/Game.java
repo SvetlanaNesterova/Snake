@@ -80,9 +80,6 @@ public class Game {
         cells[x+2*dx][y+2*dy] = new SnakePart(x+2*dx, y+2*dy);
         field = new Field(cells);
         snake = new Snake(field);
-        isOver = false;
-        score = 0;
-        ticks = 0;
         addApple();
     }
 

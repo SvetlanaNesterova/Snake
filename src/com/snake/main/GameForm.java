@@ -122,7 +122,7 @@ public class GameForm extends JPanel{
 
     private void startNewGame() {
         timer.stop();
-        game.createNewLevel();
+        game = new Game();
         repaint();
     }
 
