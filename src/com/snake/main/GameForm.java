@@ -74,7 +74,7 @@ public class GameForm extends JPanel{
             window.setTitle("Score: " + game.getScore());
             if (game.isOver()) {
                 JOptionPane.showMessageDialog(null,
-                        "YOUR SNAKE IS DEAD\nSHAMEFUL DISPLAY\n YOUR SCORE IS "+game.getScore(), "EPIC FAIL", JOptionPane.ERROR_MESSAGE);
+                        "YOUR SNAKE IS DEAD\nSHAMEFUL DISPLAY\n YOUR SCORE IS: "+game.getScore(), "EPIC FAIL", JOptionPane.ERROR_MESSAGE);
                 startNewGame();
             }
             repaint();
