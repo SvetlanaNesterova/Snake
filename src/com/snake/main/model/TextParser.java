@@ -1,7 +1,6 @@
 package com.snake.main.model;
 
 import com.snake.main.model.cell.Cell;
-import com.snake.main.model.cell.CellFactory;
 
 import java.io.*;
 import java.util.ArrayList;

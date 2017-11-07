@@ -1,4 +1,6 @@
-package com.snake.main.model.cell;
+package com.snake.main.model;
+
+import com.snake.main.model.cell.*;
 
 import java.util.HashMap;
 

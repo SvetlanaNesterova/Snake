@@ -1,6 +1,7 @@
 package com.snake.main;
 
 import com.snake.main.model.Directions;
+import com.snake.main.model.Game;
 import com.snake.main.model.cell.*;
 
 import javax.swing.*;

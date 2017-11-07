@@ -1,4 +1,4 @@
-package com.snake.main;
+package com.snake.main.model;
 
 import com.snake.main.model.Directions;
 import com.snake.main.model.Field;
