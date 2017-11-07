@@ -34,7 +34,7 @@ public class Painter {
     }
 
     public void paintVirtualSnakePart(Cell cell, Graphics2D g2) {
-
+        paintEmpty(cell, g2);
     }
 
     public void paintWall(Cell cell, Graphics2D g2) {
