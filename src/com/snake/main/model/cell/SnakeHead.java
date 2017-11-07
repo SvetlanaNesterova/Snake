@@ -6,11 +6,9 @@ public class SnakeHead extends SnakePart {
 
     public SnakeHead(int x, int y) {
         super(x, y);
-        name = "SnakeHead";
     }
 
     public SnakeHead(int x, int y, Directions direction){
         super(x, y, direction);
-        name = "SnakeHead";
     }
 }

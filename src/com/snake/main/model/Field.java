@@ -23,6 +23,8 @@ public class Field {
     }
 
     public Cell getNeighbor(Cell cell, Directions direction){
+        if (direction == null)
+            return cell;
         int x = (cell.getX() + direction.getVector().getX() + width) % width;
         int y = (cell.getY() + direction.getVector().getY() + height) % height;
         return field[x][y];

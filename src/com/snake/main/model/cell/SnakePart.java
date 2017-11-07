@@ -8,14 +8,12 @@ public class SnakePart extends Cell {
 
     public SnakePart(int x, int y) {
         super(x, y);
-        name = "SnakePart";
     }
 
     public SnakePart(int x, int y, Directions direction){
         super(x, y);
         isWalkable = false;
         this.direction = direction;
-        name = "SnakePart";
     }
 
     public Directions getDirection() {
@@ -32,5 +30,15 @@ public class SnakePart extends Cell {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() +
+                "{" +
+                "x=" + x +
+                ", y=" + y +
+                ", direction=" + direction +
+                '}';
     }
 }

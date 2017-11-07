@@ -3,6 +3,7 @@ package com.snake.main.model;
 import com.snake.main.model.cell.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Snake {
     private ArrayList<SnakePart> snakeParts;
@@ -58,6 +59,7 @@ public class Snake {
         ArrayList<SnakePart> snake = new ArrayList<>();
         SnakeHead head = findSnakeHead();
         SnakePart currentPart = head;
+        assert head != null;
         head.setDirection(Directions.Right);
         head.setPosition(position++);
         for (Directions direction : Directions.values()){
@@ -90,7 +92,6 @@ public class Snake {
                 field.hasApple = false;
             }
             field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
-            Cell cell = field.cellAt(part.getX(), part.getY());
             part.setX(targetCell.getX());
             part.setY(targetCell.getY());
             if (index!=0)
@@ -132,7 +133,7 @@ public class Snake {
             return;
         int x = (last.getX() + last.getDirection().opposite().getVector().getX()+field.getWidth())%field.getWidth();
         int y = (last.getY() + last.getDirection().opposite().getVector().getY()+field.getHeight())%field.getHeight();
-        if (field.cellAt(x, y).getName() == "Empty") {
+        if (Objects.equals(field.cellAt(x, y).getClass().getSimpleName(), "Empty")) {
             SnakePart newPart = new VirtualSnakePart(x, y, last.getDirection());
             snakeParts.add(newPart);
         }

@@ -7,6 +7,7 @@ import com.snake.main.model.cell.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
 
 public class GameForm extends JPanel{
 
@@ -14,15 +15,8 @@ public class GameForm extends JPanel{
     private final static int CELL_SIZE = 30;
     private final static int WIDTH_SHIFT = 18;
     private final static int HEIGHT_SHIFT = 47;
-    private final static int BORDER = 0;
 
-    private final static Color SNAKE_COLOR = new Color(45,219,22);
-    private final static Color SNAKE_HEAD_COLOR = new Color(0x26AB84);
     private final static Color BACKGROUND_COLOR1 = new Color(0xD9D2FF);
-    private final static Color BACKGROUND_COLOR2 = new Color(0xD3CBF0);
-    private final static Color APPLE_COLOR = new Color(0xFF2141);
-    private final static Color APPLE_ROTTEN_COLOR = new Color(0x3E1E0D);
-    private final static Color WALL_COLOR = new Color(0x023A4F);
 
     private Game game;
     private int fieldWidth;
@@ -30,12 +24,15 @@ public class GameForm extends JPanel{
     private JFrame window;
     private Timer timer;
     private Directions nextSnakeDirection;
+    private Painter painter;
 
 
     public GameForm(){
         game = new Game();
+        nextSnakeDirection = game.getSnake().getSnakeDirection();
         fieldWidth = game.getField().getWidth();
         fieldHeight = game.getField().getHeight();
+        painter = new Painter(game);
         setBackground(BACKGROUND_COLOR1);
         RepaintAction action = new RepaintAction();
         timer = new Timer(SPEED, action);
@@ -52,59 +49,22 @@ public class GameForm extends JPanel{
     }
 
     protected void paintComponent(Graphics g) {
-
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        for (int i = 0; i< game.getField().getWidth(); i++)
-            for (int j = 0; j< game.getField().getHeight(); j++){
-                switch (game.getField().cellAt(i, j).getName()){
-                    case "SnakeHead":
-                        drawCell(g2, i, j, SNAKE_HEAD_COLOR);
-                        break;
-                    case "SnakePart":
-                        drawCell(g2, i, j, getSnakeColor((SnakePart) game.getField().cellAt(i, j)));
-                        break;
-                    case "Apple":
-                        drawCell(g2, i, j, getAppleColor());
-                        break;
-                    case "Wall":
-                        drawCell(g2, i, j, WALL_COLOR);
-                        break;
-                    default:
-                        drawCell(g2, i, j, (i+j)%2 == 1 ? BACKGROUND_COLOR1 : BACKGROUND_COLOR2);
+        for (int i = 0; i< game.getField().getWidth(); i++) {
+            for (int j = 0; j < game.getField().getHeight(); j++) {
+                Cell cell = game.getField().cellAt(i, j);
+                String cellType = cell.getClass().getSimpleName();
+                try {
+                    painter.getClass().getDeclaredMethod(
+                            "paint" + cellType, Cell.class, Graphics2D.class).invoke(painter, cell, g2);
+                } catch (NoSuchMethodException e) {
+                    painter.paintDefault(cell, g2);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
                 }
             }
-    }
-
-    private void drawCell(Graphics2D g2, int i, int j, Color color) {
-        g2.setColor(color);
-        g2.fillRect(CELL_SIZE*i+BORDER, CELL_SIZE*j+BORDER, CELL_SIZE-BORDER, CELL_SIZE-BORDER);
-    }
-
-    private Color getSnakeColor(SnakePart snakePart) {
-        int position = snakePart.getPosition();
-        float[] headColors = new float[3];
-        float[] tailColors = new float[3];
-        SNAKE_COLOR.getRGBColorComponents(tailColors);
-        SNAKE_HEAD_COLOR.getRGBColorComponents(headColors);
-        return new Color(
-                (tailColors[0] - headColors[0]) / game.getSnake().getLength() * position + headColors[0],
-                (tailColors[1] - headColors[1]) / game.getSnake().getLength() * position + headColors[1],
-                (tailColors[2] - headColors[2]) / game.getSnake().getLength() * position + headColors[2]
-                );
-    }
-
-    private Color getAppleColor() {
-        final int ticksCount = Game.TICKS_TO_ROT;
-        float[] rottenColors = new float[3];
-        float[] normalColors = new float[3];
-        APPLE_COLOR.getRGBColorComponents(normalColors);
-        APPLE_ROTTEN_COLOR.getRGBColorComponents(rottenColors);
-        return new Color(
-                (rottenColors[0] - normalColors[0]) / ticksCount * game.getTicks() + normalColors[0],
-                (rottenColors[1] - normalColors[1]) / ticksCount * game.getTicks() + normalColors[1],
-                (rottenColors[2] - normalColors[2]) / ticksCount * game.getTicks() + normalColors[2]
-        );
+        }
     }
 
     private class RepaintAction implements ActionListener{
@@ -124,6 +84,7 @@ public class GameForm extends JPanel{
     private void startNewGame() {
         timer.stop();
         game = new Game();
+        painter = new Painter(game);
         repaint();
     }
 
@@ -169,7 +130,7 @@ public class GameForm extends JPanel{
                 window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
             }
             if (direction == null)
-                direction = game.getSnake().getSnakeDirection();
+                return;
             if (direction.isOpposite(game.getSnake().getSnakeDirection()))
                 return;
             nextSnakeDirection = direction;
