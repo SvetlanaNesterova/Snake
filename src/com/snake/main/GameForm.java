@@ -85,6 +85,7 @@ public class GameForm extends JPanel{
         timer.stop();
         game = new Game();
         painter = new Painter(game);
+        nextSnakeDirection = game.getSnake().getSnakeDirection();
         repaint();
     }
 
