@@ -66,16 +66,26 @@ public class FieldGenerator {
     }
 
     private static void createSnake() {
+        ArrayList<SnakeHead> possibleHeads = getPossibleSnakeHeads();
         Random random = new Random();
-        int x = 0, y = 0;
-        while (!(cells[x][y] instanceof Empty)) {
-            x = random.nextInt(width - width / 2) + width / 4;
-            y = random.nextInt(height - height / 2) + height / 4;
-        }
-        ArrayList<Cell> horizontalSpacesStarts = getSpacesStarts(Directions.Right);
-        ArrayList<Cell> verticalSpacesStarts = getSpacesStarts(Directions.Up);
+        int index = random.nextInt(possibleHeads.size());
+        SnakeHead head = possibleHeads.get(index);
+        putSnakeFrom(head);
+    }
 
-        putSnake(x, y, direction);
+    private static ArrayList<SnakeHead> getPossibleSnakeHeads() {
+        ArrayList<Cell> horizontalSpacesStarts = getSpacesStarts(Directions.Right);
+        ArrayList<Cell> verticalSpacesStarts = getSpacesStarts(Directions.Down);
+        ArrayList<SnakeHead> result = new ArrayList<SnakeHead>();
+        horizontalSpacesStarts.forEach(cell -> {
+            result.add(new SnakeHead(cell.getX() + 1, cell.getY(), Directions.Left));
+            result.add(new SnakeHead(cell.getX() + 2, cell.getY(), Directions.Right));
+        });
+        verticalSpacesStarts.forEach(cell -> {
+            result.add(new SnakeHead(cell.getX(), cell.getY() + 1, Directions.Up));
+            result.add(new SnakeHead(cell.getX(), cell.getY() + 2, Directions.Down));
+        });
+        return result;
     }
 
     private static ArrayList<Cell> getSpacesStarts(Directions direction) {
@@ -84,26 +94,30 @@ public class FieldGenerator {
         int dy = direction.getVector().getY();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                boolean isEmptySpace = false;
+                boolean isEmptySpace = true;
                 int x = i;
                 int y = j;
                 for (int spaceCount = 0; spaceCount < SNAKE_SPACE; spaceCount++) {
+                    if (!(0 <= x && x < width) || !(0 <= y && y < height) || !(cells[x][y] instanceof Empty)) {
+                        isEmptySpace = false;
+                    }
                     x += dx;
                     y += dy;
-                    if (cells[x][y] instanceof Empty) {
-
-                    }
+                }
+                if (isEmptySpace) {
+                    starts.add(cells[i][j]);
                 }
             }
         }
+        return starts;
     }
 
-    private static void putSnake(int headX, int headY, Directions direction) {
-        SnakeHead head = new SnakeHead(headX, headY);
-        head.setDirection(direction);
+    private static void putSnakeFrom(SnakeHead head) {
+        int headX = head.getX();
+        int headY = head.getY();
         cells[headX][headY] = head;
-        int dx = head.getDirection().getVector().getX();
-        int dy = head.getDirection().getVector().getY();
+        int dx = head.getDirection().opposite().getVector().getX();
+        int dy = head.getDirection().opposite().getVector().getY();
         cells[headX + dx][headY + dy] = new SnakePart(headX + dx, headY + dy);
         cells[headX + 2 * dx][headY + 2 * dy] = new SnakePart(headX + 2 * dx, headY + 2 * dy);
     }
