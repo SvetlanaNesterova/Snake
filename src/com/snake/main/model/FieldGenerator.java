@@ -7,14 +7,15 @@ import java.util.Random;
 
 public class FieldGenerator {
     private static final int SNAKE_SPACE = 4;
-    private static final int ROOM_SIZE = 5;
+    private static final int ROOM_SIZE = 6;
     private static Cell[][] cells;
     private static int width;
     private static int height;
 
     public static Field generateMaze() {
-        width = 40;
-        height = 20;
+        width = 54;
+        height = 30;
+        createEmptyCells();
         createMaze();
         createSnake();
         return new Field(cells);
@@ -29,7 +30,6 @@ public class FieldGenerator {
     }
 
     private static void createMaze(){
-        cells = new Cell[width][height];
         int rooms_width_count = width/ROOM_SIZE;
         int rooms_height_count = height/ROOM_SIZE;
         for (int x = 0; x < rooms_width_count; x++)
@@ -38,22 +38,29 @@ public class FieldGenerator {
     }
 
     private static void createRoom(int room_up_x, int room_left_y){
-        int room_down_x = room_up_x + ROOM_SIZE - 1;
-        int room_right_y = room_left_y + ROOM_SIZE - 1;
+        int room_down_x = room_up_x + ROOM_SIZE - 2;
+        int room_right_y = room_left_y + ROOM_SIZE - 2;
         ArrayList<Wall> walls = new ArrayList<>();
         for (int x = room_up_x; x <= room_down_x; x++)
             for (int y = room_left_y; y <= room_right_y; y++)
-                if (x != room_up_x && x != room_down_x && y != room_left_y && y != room_right_y)
-                    cells[x][y] = new Empty(x, y);
-                else {
+                if (x == room_up_x || x == room_down_x || y == room_left_y || y == room_right_y) {
                     cells[x][y] = new Wall(x, y);
-                    walls.add((Wall)cells[x][y]);
+                    walls.add((Wall) cells[x][y]);
                 }
         createDoors(walls);
     }
 
     private static void createDoors(ArrayList<Wall> walls){
-
+        Random rand = new Random();
+        int n = rand.nextInt(6)+4;
+        int walls_count = walls.size();
+        for (int i=0; i<n; i++){
+            int j = rand.nextInt(walls_count);
+            Wall wall = walls.get(j);
+            cells[wall.getX()][wall.getY()] = new Empty(wall.getX(), wall.getY());
+            walls.remove(j);
+            walls_count--;
+        }
     }
 
     private static void createEmptyCells() {
