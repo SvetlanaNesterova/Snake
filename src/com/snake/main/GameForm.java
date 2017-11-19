@@ -42,7 +42,7 @@ public class GameForm extends JPanel{
         window.addKeyListener(new Listener());
         window.setContentPane(this);
         window.setSize(CELL_SIZE*fieldWidth+WIDTH_SHIFT, CELL_SIZE*fieldHeight+ HEIGHT_SHIFT);
-        window.setLocation(100,100);
+        window.setLocation(50,50);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setVisible(true);
         window.requestFocusInWindow();
