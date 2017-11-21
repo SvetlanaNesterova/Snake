@@ -13,8 +13,8 @@ public class FieldGenerator {
     private static int height;
 
     public static Field generateMaze() {
-        width = 54;
-        height = 30;
+        width = 36;
+        height = 18;
         createEmptyCells();
         createMaze();
         createSnake();
@@ -34,7 +34,7 @@ public class FieldGenerator {
         int rooms_height_count = height/ROOM_SIZE;
         for (int x = 0; x < rooms_width_count; x++)
             for (int y = 0; y < rooms_height_count; y++)
-                createRoom(x*ROOM_SIZE, y*ROOM_SIZE);
+                createRoom1(x*ROOM_SIZE, y*ROOM_SIZE);
     }
 
     private static void createRoom(int room_up_x, int room_left_y){
@@ -50,6 +50,36 @@ public class FieldGenerator {
         createDoors(walls);
     }
 
+    private static void createRoom1(int room_left_x, int room_up_y){
+        Random random = new Random();
+        int dx = random.nextInt(2);
+        int dy = random.nextInt(2);
+        room_left_x += dx;
+        room_up_y += dy;
+        dx = random.nextInt(2) - 1;
+        dy = random.nextInt(2) - 1;
+        int room_right_x = room_left_x + ROOM_SIZE - 2 + dx;
+        int room_down_y = room_up_y + ROOM_SIZE - 2 + dy;
+        ArrayList<Wall> walls = new ArrayList<>();
+        for (int x = room_left_x; x <= room_right_x; x++) {
+            cells[x][room_up_y] = new Wall(x, room_up_y);
+            walls.add((Wall) cells[x][room_up_y]);
+        }
+        for (int y = room_up_y + 1; y <= room_down_y; y++) {
+                cells[room_right_x][y] = new Wall(room_right_x, y);
+                    walls.add((Wall) cells[room_right_x][y]);
+                }
+        for (int x = room_right_x - 1; x >= room_left_x; x--) {
+            cells[x][room_down_y] = new Wall(x, room_down_y);
+            walls.add((Wall) cells[x][room_down_y]);
+        }
+        for (int y = room_down_y - 1; y >= room_up_y + 1; y--) {
+            cells[room_left_x][y] = new Wall(room_left_x, y);
+            walls.add((Wall) cells[room_left_x][y]);
+        }
+        createDoors1(walls);
+    }
+
     private static void createDoors(ArrayList<Wall> walls){
         Random rand = new Random();
         int n = rand.nextInt(6)+4;
@@ -60,6 +90,25 @@ public class FieldGenerator {
             cells[wall.getX()][wall.getY()] = new Empty(wall.getX(), wall.getY());
             walls.remove(j);
             walls_count--;
+        }
+    }
+
+    private static void createDoors1(ArrayList<Wall> walls){
+        int walls_count = walls.size();
+        Random rand = new Random();
+        int start = rand.nextInt(walls_count);
+        int firstEmptySpace =  rand.nextInt(3) + 2;
+        int firstWallSpace = rand.nextInt(3) + 2;
+        int secondEmptySpace = rand.nextInt(3) + 2;
+        int secondWallSpace = walls_count - firstEmptySpace - firstWallSpace - secondEmptySpace;
+        for (int i = 0; i < firstEmptySpace; i++){
+            Wall wall = walls.get((start + i) % walls_count);
+            cells[wall.getX()][wall.getY()] = new Empty(wall.getX(), wall.getY());
+        }
+
+        for (int i = 0; i < secondEmptySpace; i++){
+            Wall wall = walls.get((start + i + firstEmptySpace + firstWallSpace) % walls_count);
+            cells[wall.getX()][wall.getY()] = new Empty(wall.getX(), wall.getY());
         }
     }
 

@@ -12,7 +12,7 @@ public class Game {
     private boolean isOver;
     private int score;
     private int ticks;
-    public final static int TICKS_TO_ROT = 25;
+    public final static int TICKS_TO_ROT = 50;
 
     public Game(){
         createNewLevel();
