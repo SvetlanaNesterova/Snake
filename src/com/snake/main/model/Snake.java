@@ -35,7 +35,7 @@ public class Snake {
 
 
     private SnakeHead findSnakeHead(){
-        for (int i=0; i<=field.getWidth(); i++){
+        for (int i=0; i<field.getWidth(); i++){
             for (int j=0; j<field.getHeight(); j++)
                 if (field.cellAt(i, j) instanceof SnakeHead)
                     return (SnakeHead) field.cellAt(i, j);
