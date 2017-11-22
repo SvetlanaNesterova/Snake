@@ -75,7 +75,7 @@ public class Game {
 //        int dy = head.getDirection().getVector().getY();
 //        cells[x+dx][y+dy] = new SnakePart(x+dx, y+dy);
 //        cells[x+2*dx][y+2*dy] = new SnakePart(x+2*dx, y+2*dy);
-        field = FieldGenerator.generateMaze();
+        field = FieldGenerator.getInstance().generateMaze();
         snake = new Snake(field);
         addApple();
     }

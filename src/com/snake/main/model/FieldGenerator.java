@@ -6,22 +6,34 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class FieldGenerator {
+
+    private static FieldGenerator instance;
+    private FieldGenerator(){
+
+    }
+    public static FieldGenerator getInstance(){
+        if (instance==null){
+            instance = new FieldGenerator();
+        }
+        return instance;
+    }
+
     private static final int SNAKE_SPACE = 4;
     private static final int ROOM_SIZE = 6;
-    private static Cell[][] cells;
-    private static int width;
-    private static int height;
+    private Cell[][] cells;
+    private int width;
+    private int height;
 
-    public static Field generateMaze() {
-        width = 36;
-        height = 18;
+    public Field generateMaze() {
+        width = 42;
+        height = 30;
         createEmptyCells();
         createMaze();
         createSnake();
         return new Field(cells);
     }
 
-    public static Field generateEmpty() {
+    public Field generateEmpty() {
         width = 20;
         height = 20;
         createEmptyCells();
@@ -29,7 +41,7 @@ public class FieldGenerator {
         return new Field(cells);
     }
 
-    private static void createMaze(){
+    private void createMaze(){
         int rooms_width_count = width/ROOM_SIZE;
         int rooms_height_count = height/ROOM_SIZE;
         for (int x = 0; x < rooms_width_count; x++)
@@ -37,7 +49,7 @@ public class FieldGenerator {
                 createRoom1(x*ROOM_SIZE, y*ROOM_SIZE);
     }
 
-    private static void createRoom(int room_up_x, int room_left_y){
+    private void createRoom(int room_up_x, int room_left_y){
         int room_down_x = room_up_x + ROOM_SIZE - 2;
         int room_right_y = room_left_y + ROOM_SIZE - 2;
         ArrayList<Wall> walls = new ArrayList<>();
@@ -50,7 +62,7 @@ public class FieldGenerator {
         createDoors(walls);
     }
 
-    private static void createRoom1(int room_left_x, int room_up_y){
+    private void createRoom1(int room_left_x, int room_up_y){
         Random random = new Random();
         int dx = random.nextInt(2);
         int dy = random.nextInt(2);
@@ -66,9 +78,9 @@ public class FieldGenerator {
             walls.add((Wall) cells[x][room_up_y]);
         }
         for (int y = room_up_y + 1; y <= room_down_y; y++) {
-                cells[room_right_x][y] = new Wall(room_right_x, y);
-                    walls.add((Wall) cells[room_right_x][y]);
-                }
+            cells[room_right_x][y] = new Wall(room_right_x, y);
+            walls.add((Wall) cells[room_right_x][y]);
+        }
         for (int x = room_right_x - 1; x >= room_left_x; x--) {
             cells[x][room_down_y] = new Wall(x, room_down_y);
             walls.add((Wall) cells[x][room_down_y]);
@@ -80,7 +92,7 @@ public class FieldGenerator {
         createDoors1(walls);
     }
 
-    private static void createDoors(ArrayList<Wall> walls){
+    private void createDoors(ArrayList<Wall> walls){
         Random rand = new Random();
         int n = rand.nextInt(6)+4;
         int walls_count = walls.size();
@@ -93,7 +105,7 @@ public class FieldGenerator {
         }
     }
 
-    private static void createDoors1(ArrayList<Wall> walls){
+    private void createDoors1(ArrayList<Wall> walls){
         int walls_count = walls.size();
         Random rand = new Random();
         int start = rand.nextInt(walls_count);
@@ -112,7 +124,7 @@ public class FieldGenerator {
         }
     }
 
-    private static void createEmptyCells() {
+    private void createEmptyCells() {
         cells = new Cell[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -121,7 +133,7 @@ public class FieldGenerator {
         }
     }
 
-    private static void createSnake() {
+    private void createSnake() {
         ArrayList<SnakeHead> possibleHeads = getPossibleSnakeHeads();
         Random random = new Random();
         int index = random.nextInt(possibleHeads.size());
@@ -129,10 +141,10 @@ public class FieldGenerator {
         putSnakeFrom(head);
     }
 
-    private static ArrayList<SnakeHead> getPossibleSnakeHeads() {
+    private ArrayList<SnakeHead> getPossibleSnakeHeads() {
         ArrayList<Cell> horizontalSpacesStarts = getSpacesStarts(Directions.Right);
         ArrayList<Cell> verticalSpacesStarts = getSpacesStarts(Directions.Down);
-        ArrayList<SnakeHead> result = new ArrayList<SnakeHead>();
+        ArrayList<SnakeHead> result = new ArrayList<>();
         horizontalSpacesStarts.forEach(cell -> {
             result.add(new SnakeHead(cell.getX() + 1, cell.getY(), Directions.Left));
             result.add(new SnakeHead(cell.getX() + 2, cell.getY(), Directions.Right));
@@ -144,7 +156,7 @@ public class FieldGenerator {
         return result;
     }
 
-    private static ArrayList<Cell> getSpacesStarts(Directions direction) {
+    private ArrayList<Cell> getSpacesStarts(Directions direction) {
         ArrayList<Cell> starts = new ArrayList<Cell>();
         int dx = direction.getVector().getX();
         int dy = direction.getVector().getY();
@@ -154,21 +166,19 @@ public class FieldGenerator {
                 int x = i;
                 int y = j;
                 for (int spaceCount = 0; spaceCount < SNAKE_SPACE; spaceCount++) {
-                    if (!(0 <= x && x < width) || !(0 <= y && y < height) || !(cells[x][y] instanceof Empty)) {
+                    if (!(0 <= x && x < width) || !(0 <= y && y < height) || !(cells[x][y] instanceof Empty))
                         isEmptySpace = false;
-                    }
                     x += dx;
                     y += dy;
                 }
-                if (isEmptySpace) {
+                if (isEmptySpace)
                     starts.add(cells[i][j]);
-                }
             }
         }
         return starts;
     }
 
-    private static void putSnakeFrom(SnakeHead head) {
+    private void putSnakeFrom(SnakeHead head) {
         int headX = head.getX();
         int headY = head.getY();
         cells[headX][headY] = head;
