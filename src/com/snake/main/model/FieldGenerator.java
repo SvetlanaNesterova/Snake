@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class FieldGenerator {
-
     private static FieldGenerator instance;
-    private FieldGenerator(){
 
+    private FieldGenerator(){
     }
+
     public static FieldGenerator getInstance(){
         if (instance==null){
             instance = new FieldGenerator();
@@ -33,12 +33,34 @@ public class FieldGenerator {
         return new Field(cells);
     }
 
-    public Field generateEmpty() {
-        width = 20;
-        height = 20;
+    public Field generateEmpty() throws Exception{
+        return generateEmpty(20,20);
+    }
+
+    public Field generateEmpty(int width, int height) throws Exception {
+        checkSize(width, height);
+        this.width = width;
+        this.height = height;
         createEmptyCells();
         createSnake();
         return new Field(cells);
+    }
+
+    private void checkSize( int width, int height) throws Exception{
+        if (height < 4 || width < 4) {
+            String msg = "(" + height + "," +  width + ") " +
+                    "is too small field size. Height and width should be more then 3.";
+            throw new Exception(msg);
+        }
+    }
+
+    private void createEmptyCells() {
+        cells = new Cell[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                cells[i][j] = new Empty(i, j);
+            }
+        }
     }
 
     private void createMaze(){
@@ -109,9 +131,9 @@ public class FieldGenerator {
         int walls_count = walls.size();
         Random rand = new Random();
         int start = rand.nextInt(walls_count);
-        int firstEmptySpace =  rand.nextInt(3) + 2;
-        int firstWallSpace = rand.nextInt(3) + 2;
-        int secondEmptySpace = rand.nextInt(3) + 2;
+        int firstEmptySpace =  rand.nextInt(2) + 3;
+        int firstWallSpace = rand.nextInt(3) + 3;
+        int secondEmptySpace = rand.nextInt(2) + 3;
         int secondWallSpace = walls_count - firstEmptySpace - firstWallSpace - secondEmptySpace;
         for (int i = 0; i < firstEmptySpace; i++){
             Wall wall = walls.get((start + i) % walls_count);
@@ -121,15 +143,6 @@ public class FieldGenerator {
         for (int i = 0; i < secondEmptySpace; i++){
             Wall wall = walls.get((start + i + firstEmptySpace + firstWallSpace) % walls_count);
             cells[wall.getX()][wall.getY()] = new Empty(wall.getX(), wall.getY());
-        }
-    }
-
-    private void createEmptyCells() {
-        cells = new Cell[width][height];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                cells[i][j] = new Empty(i, j);
-            }
         }
     }
 
