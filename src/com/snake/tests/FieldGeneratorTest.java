@@ -1,6 +1,7 @@
 package com.snake.tests;
 
 import com.snake.main.model.Directions;
+import com.snake.main.model.Snake;
 import com.snake.main.model.cell.Empty;
 import com.snake.main.model.cell.SnakeHead;
 import com.snake.main.model.cell.SnakePart;
@@ -9,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import com.snake.main.model.FieldGenerator;
 import com.snake.main.model.Field;
 import com.snake.main.model.cell.Cell;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -97,6 +101,7 @@ public class FieldGeneratorTest {
                 Cell cell = field.cellAt(i, j);
                 if (cell instanceof SnakeHead) {
                     head = (SnakeHead)cell;
+                    break;
                 }
             }
         }
@@ -108,5 +113,41 @@ public class FieldGeneratorTest {
                 assertTrue(oppNeighbour instanceof Empty);
             }
         }
+    }
+
+    @Test
+    void snakeIntegrity(){
+        Field field = generator.generateMaze();
+        SnakeHead head = new SnakeHead(0,0);
+        ArrayList<SnakePart> passed = new ArrayList<>();
+        for (int i = 0; i < field.getWidth(); i++) {
+            for (int j = 0; j < field.getHeight(); j++) {
+                Cell cell = field.cellAt(i, j);
+                if (cell instanceof SnakeHead) {
+                    head = (SnakeHead) cell;
+                    passed.add(head);
+                    break;
+                }
+            }
+        }
+        SnakePart currentPart = head;
+        for (int i=0; i<2; i++){
+            ArrayList<SnakePart> possibleNextParts = findPossibleNextParts(field, currentPart);
+            for (SnakePart part : possibleNextParts)
+                if (passed.contains(part))
+                    possibleNextParts.remove(part);
+            assertEquals(1, possibleNextParts.size());
+            currentPart = possibleNextParts.get(0);
+        }
+    }
+
+    private ArrayList<SnakePart> findPossibleNextParts(Field field, SnakePart snakePart){
+        ArrayList<SnakePart> nextParts = new ArrayList<>();
+        for (Directions dir : Directions.values()){
+            Cell neighbour = field.getNeighbor(snakePart, dir);
+            if (neighbour instanceof SnakePart)
+                nextParts.add((SnakePart)neighbour);
+        }
+        return  nextParts;
     }
 }
