@@ -138,6 +138,7 @@ public class FieldGeneratorTest {
                     possibleNextParts.remove(part);
             assertEquals(1, possibleNextParts.size());
             currentPart = possibleNextParts.get(0);
+            passed.add(currentPart);
         }
     }
 
