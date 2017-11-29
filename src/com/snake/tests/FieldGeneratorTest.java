@@ -116,9 +116,9 @@ public class FieldGeneratorTest {
     }
 
     @Test
-    void snakeIntegrity(){
+    void snakeIntegrity() {
         Field field = generator.generateMaze();
-        SnakeHead head = new SnakeHead(0,0);
+        SnakeHead head = new SnakeHead(0, 0);
         ArrayList<SnakePart> passed = new ArrayList<>();
         for (int i = 0; i < field.getWidth(); i++) {
             for (int j = 0; j < field.getHeight(); j++) {
@@ -131,14 +131,16 @@ public class FieldGeneratorTest {
             }
         }
         SnakePart currentPart = head;
-        for (int i=0; i<2; i++){
+        for (int i = 0; i < 2; i++) {
             ArrayList<SnakePart> possibleNextParts = findPossibleNextParts(field, currentPart);
+            int unpassedSnakePartsCount = 0;
             for (SnakePart part : possibleNextParts)
-                if (passed.contains(part))
-                    possibleNextParts.remove(part);
-            assertEquals(1, possibleNextParts.size());
-            currentPart = possibleNextParts.get(0);
-            passed.add(currentPart);
+                if (!passed.contains(part)) {
+                    unpassedSnakePartsCount++;
+                    passed.add(part);
+                    currentPart = part;
+                }
+            assertEquals(1, unpassedSnakePartsCount);
         }
     }
 
