@@ -28,7 +28,11 @@ public class GameForm extends JPanel{
 
 
     public GameForm(){
-        game = new Game();
+        try {
+            game = new Game();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         nextSnakeDirection = game.getSnake().getSnakeDirection();
         fieldWidth = game.getField().getWidth();
         fieldHeight = game.getField().getHeight();
@@ -70,7 +74,11 @@ public class GameForm extends JPanel{
     private class RepaintAction implements ActionListener{
         public void actionPerformed(ActionEvent evt) {
             game.getSnake().changeHeadDirection(nextSnakeDirection);
-            game.makeStep();
+            try {
+                game.makeStep();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             window.setTitle("Score: " + game.getScore());
             if (game.isOver()) {
                 JOptionPane.showMessageDialog(null,
@@ -83,7 +91,11 @@ public class GameForm extends JPanel{
 
     private void startNewGame() {
         timer.stop();
-        game = new Game();
+        try {
+            game = new Game();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         painter = new Painter(game);
         nextSnakeDirection = game.getSnake().getSnakeDirection();
         repaint();

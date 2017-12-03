@@ -2,6 +2,7 @@ package com.snake.main.model;
 
 import com.snake.main.model.cell.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -10,6 +11,8 @@ public class Snake {
     private SnakeHead snakeHead;
     private Field field;
     private boolean isDead;
+    private int score = 0;
+    private int eatenApples = 0;
 
     public Snake(Field field) {
         this.field = field;
@@ -36,7 +39,6 @@ public class Snake {
     public Field getField(){
         return field;
     }
-
 
     private SnakeHead findSnakeHead(){
         for (int i=0; i<field.getWidth(); i++){
@@ -79,20 +81,22 @@ public class Snake {
         return snake;
     }
 
-    public void makeMove(){
+    public void makeMove() throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
         tryAddVirtualPart();
         for (int i=0; i<this.getLength(); i++)
             moveSnakePart(snakeParts.get(i), i);
     }
 
-    private void moveSnakePart(SnakePart part, int index) {
+    private void moveSnakePart(SnakePart part, int index)
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Directions direction = part.getDirection();
         Cell targetCell = field.getNeighbor(part, direction);
         if (!targetCell.isWalkable())
             isDead = true;
         else {
-            if (targetCell instanceof Apple) {
-                ((Apple) targetCell).makeEffect(this);
+            if (targetCell instanceof Food) {
+                ((Food)targetCell).makeEffect(this);
             }
             field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
             part.setX(targetCell.getX());
@@ -140,6 +144,22 @@ public class Snake {
             SnakePart newPart = new VirtualSnakePart(x, y, last.getDirection());
             snakeParts.add(newPart);
         }
+    }
+
+    public int getScore(){
+        return score;
+    }
+
+    public void changeScore(int delta) {
+        score += delta;
+    }
+
+    public int getEatenApples(){
+        return eatenApples;
+    }
+
+    public void changeEatenApples(int delta) {
+        eatenApples += delta;
     }
 }
 

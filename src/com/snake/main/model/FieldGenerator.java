@@ -19,14 +19,14 @@ public class FieldGenerator {
     }
 
     private static final int SNAKE_SPACE = 4;
-    private static final int ROOM_SIZE = 6;
+    private static final int ROOM_SIZE = 10;
     private Cell[][] cells;
     private int width;
     private int height;
 
     public Field generateMaze() {
-        width = 42;
-        height = 30;
+        width = 30;
+        height = 20;
         createEmptyCells();
         createMaze();
         createSnake();
@@ -131,9 +131,9 @@ public class FieldGenerator {
         int walls_count = walls.size();
         Random rand = new Random();
         int start = rand.nextInt(walls_count);
-        int firstEmptySpace =  rand.nextInt(2) + 3;
-        int firstWallSpace = rand.nextInt(3) + 3;
-        int secondEmptySpace = rand.nextInt(2) + 3;
+        int firstEmptySpace =  rand.nextInt(3) + 4;
+        int firstWallSpace = rand.nextInt(4) + 4;
+        int secondEmptySpace = rand.nextInt(3) + 4;
         int secondWallSpace = walls_count - firstEmptySpace - firstWallSpace - secondEmptySpace;
         for (int i = 0; i < firstEmptySpace; i++){
             Wall wall = walls.get((start + i) % walls_count);
