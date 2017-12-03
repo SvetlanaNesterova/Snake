@@ -21,8 +21,8 @@ public class Painter {
     private final static Color ERROR_COLOR = new Color(0xFF07E6);
 
     private final static Image REVERSER_IMAGE = new ImageIcon("src\\com\\snake\\assets\\reverser.png").getImage();
-    private final static Image ACCELERATOR_IMAGE = new ImageIcon("src\\com\\snake\\assets\\reverser.png").getImage();
-    private final static Image REDUCER_IMAGE = new ImageIcon("src\\com\\snake\\assets\\reducer.png").getImage();
+    private final static Image ACCELERATOR_IMAGE = new ImageIcon("src\\com\\snake\\assets\\accelerator.png").getImage();
+    private final static Image RETARDER_IMAGE = new ImageIcon("src\\com\\snake\\assets\\retarder.png").getImage();
 
 
     private Game game;
@@ -68,8 +68,8 @@ public class Painter {
         drawImage(cell, g2, ACCELERATOR_IMAGE);
     }
 
-    public void paintReducer(Cell cell, Graphics2D g2){
-        drawImage(cell, g2, REDUCER_IMAGE);
+    public void paintRetarder(Cell cell, Graphics2D g2){
+        drawImage(cell, g2, RETARDER_IMAGE);
     }
 
     private static void drawImage(Cell cell, Graphics2D g2, Image img){
