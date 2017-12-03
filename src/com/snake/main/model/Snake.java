@@ -13,6 +13,9 @@ public class Snake {
     private boolean isDead;
     private int score = 0;
     private int eatenApples = 0;
+    private SnakeSpeed speed;
+    private int timeToNormal;
+    private int ticksMod6 = 0;
 
     public Snake(Field field) {
         this.field = field;
@@ -38,6 +41,15 @@ public class Snake {
 
     public Field getField(){
         return field;
+    }
+
+    public enum SnakeSpeed {
+        Slow, Normal, Fast;
+    }
+
+    public void setSpeed(SnakeSpeed speed, int time) {
+        timeToNormal = time;
+        this.speed = speed;
     }
 
     private SnakeHead findSnakeHead(){
@@ -82,6 +94,23 @@ public class Snake {
     }
 
     public void makeMove() throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
+        if (timeToNormal > 0)
+            timeToNormal--;
+        else
+            speed = SnakeSpeed.Normal;
+
+        ticksMod6++;
+        ticksMod6 %= 6;
+        if (speed == SnakeSpeed.Slow && ticksMod6 % 6 == 0 ||
+                speed == SnakeSpeed.Normal && ticksMod6 % 3 == 0 ||
+                speed == SnakeSpeed.Fast && ticksMod6 % 2 == 0) {
+            move();
+        }
+    }
+
+    private void move()
+            throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
         tryAddVirtualPart();
         for (int i=0; i<this.getLength(); i++)

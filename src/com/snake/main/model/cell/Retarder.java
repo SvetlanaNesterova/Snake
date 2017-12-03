@@ -5,6 +5,8 @@ import com.snake.main.model.Snake;
 import java.lang.reflect.InvocationTargetException;
 
 public class Retarder extends Food{
+    private final static int duration = 50;
+
     public Retarder(int x, int y) {
         super(x, y);
     }
@@ -13,6 +15,7 @@ public class Retarder extends Food{
     public void makeEffect(Snake snake)
             throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, InvocationTargetException {
+        snake.setSpeed(Snake.SnakeSpeed.Slow, duration);
         reincarnate(snake.getField());
     }
 }

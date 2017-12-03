@@ -11,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class GameForm extends JPanel{
 
-    private final static int SPEED = 150;
+    private final static int SPEED = 75;
     private final static int CELL_SIZE = 30;
     private final static int WIDTH_SHIFT = 18;
     private final static int HEIGHT_SHIFT = 47;

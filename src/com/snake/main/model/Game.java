@@ -10,7 +10,7 @@ public class Game {
     private Field field;
     private Snake snake;
     private boolean isOver;
-    public final static int TICKS_TO_ROT = 50;
+    public final static int TICKS_TO_ROT = 100;
 
     public Game() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         try {
@@ -36,7 +36,15 @@ public class Game {
             InstantiationException, IllegalAccessException {
         field = FieldGenerator.getInstance().generateMaze();
         snake = new Snake(field);
+        addFoods();
+    }
+
+    private void addFoods()
+            throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
         field.addFood(Apple.class);
+        field.addFood(Accelerator.class);
+        field.addFood(Retarder.class);
     }
 
     public Field getField() {
