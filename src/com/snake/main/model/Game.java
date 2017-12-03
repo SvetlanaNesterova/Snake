@@ -18,7 +18,7 @@ public class Game {
         createNewLevel();
     }
 
-    public void makeStep(){
+    public void makeStep() {
         snake.makeMove();
         isOver = snake.isDead();
         if (!field.hasApple) {
