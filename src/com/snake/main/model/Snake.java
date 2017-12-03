@@ -2,6 +2,7 @@ package com.snake.main.model;
 
 import com.snake.main.model.cell.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -10,6 +11,8 @@ public class Snake {
     private SnakeHead snakeHead;
     private Field field;
     private boolean isDead;
+    private int score = 0;
+    private int eatenApples = 0;
 
     public Snake(Field field) {
         this.field = field;
@@ -36,7 +39,6 @@ public class Snake {
     public Field getField(){
         return field;
     }
-
 
     private SnakeHead findSnakeHead(){
         for (int i=0; i<field.getWidth(); i++){
@@ -79,13 +81,15 @@ public class Snake {
         return snake;
     }
 
-    public void makeMove(){
+    public void makeMove() throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
         tryAddVirtualPart();
         for (int i=0; i<this.getLength(); i++)
             moveSnakePart(snakeParts.get(i), i);
     }
 
-    private void moveSnakePart(SnakePart part, int index) {
+    private void moveSnakePart(SnakePart part, int index)
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Directions direction = part.getDirection();
         Cell targetCell = field.getNeighbor(part, direction);
         if (!targetCell.isWalkable())
@@ -143,15 +147,36 @@ public class Snake {
     }
 
     public void reverse(){
-        SnakePart tail = this.snakeParts.get(this.snakeParts.size()-1);
+        SnakePart tail = this.snakeParts.get(this.snakeParts.size()-2);
         field.setCellAt(snakeHead.getX(), snakeHead.getY(), new SnakePart(snakeHead.getX(), snakeHead.getY()));
-        field.setCellAt(tail.getPosition(), tail.getY(), new SnakeHead(tail.getX(), tail.getY()));
+        field.setCellAt(tail.getX(), tail.getY(), new SnakeHead(tail.getX(), tail.getY()));
+        for (SnakePart part : snakeParts) {
+            if (part instanceof VirtualSnakePart)
+                field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
+            part.setDirection(null);
+        }
         snakeParts = findSnake();
         snakeHead = (SnakeHead)this.snakeParts.get(0);
     }
 
     public void reduce(){
 
+    }
+
+    public int getScore(){
+        return score;
+    }
+
+    public void changeScore(int delta) {
+        score += delta;
+    }
+
+    public int getEatenApples(){
+        return eatenApples;
+    }
+
+    public void changeEatenApples(int delta) {
+        eatenApples += delta;
     }
 }
 
