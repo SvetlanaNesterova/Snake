@@ -96,7 +96,7 @@ public class Snake {
             isDead = true;
         else {
             if (targetCell instanceof Food) {
-                ((Food)targetCell).makeEffect(this);
+                ((Food) targetCell).makeEffect(this);
             }
             field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
             part.setX(targetCell.getX());
@@ -144,6 +144,18 @@ public class Snake {
             SnakePart newPart = new VirtualSnakePart(x, y, last.getDirection());
             snakeParts.add(newPart);
         }
+    }
+
+    public void reverse(){
+        SnakePart tail = this.snakeParts.get(this.snakeParts.size()-1);
+        field.setCellAt(snakeHead.getX(), snakeHead.getY(), new SnakePart(snakeHead.getX(), snakeHead.getY()));
+        field.setCellAt(tail.getPosition(), tail.getY(), new SnakeHead(tail.getX(), tail.getY()));
+        snakeParts = findSnake();
+        snakeHead = (SnakeHead)this.snakeParts.get(0);
+    }
+
+    public void reduce(){
+
     }
 
     public int getScore(){
