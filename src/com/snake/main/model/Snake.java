@@ -141,5 +141,9 @@ public class Snake {
             snakeParts.add(newPart);
         }
     }
+
+    public void reverse(){
+        
+    }
 }
 
