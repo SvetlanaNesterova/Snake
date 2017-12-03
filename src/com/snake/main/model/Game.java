@@ -26,7 +26,7 @@ public class Game {
             score++;
             ticks = 0;
         }
-        if (ticks > TICKS_TO_ROT) {
+        if (ticks >= TICKS_TO_ROT) {
             ticks = 0;
             removeApple();
             addApple();

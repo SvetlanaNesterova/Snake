@@ -33,6 +33,10 @@ public class Snake {
         return snakeHead.getDirection();
     }
 
+    public Field getField(){
+        return field;
+    }
+
 
     private SnakeHead findSnakeHead(){
         for (int i=0; i<field.getWidth(); i++){
@@ -88,8 +92,7 @@ public class Snake {
             isDead = true;
         else {
             if (targetCell instanceof Apple) {
-                addPart();
-                field.hasApple = false;
+                ((Apple) targetCell).makeEffect(this);
             }
             field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
             part.setX(targetCell.getX());
@@ -116,7 +119,7 @@ public class Snake {
         return new Vector(dx, dy).toDirection();
     }
 
-    private void addPart(){
+    public void addPart(){
         SnakePart virtual = snakeParts.get(this.getLength() - 1);
         int x = virtual.getX();
         int y = virtual.getY();

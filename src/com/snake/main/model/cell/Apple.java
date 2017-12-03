@@ -1,9 +1,17 @@
 package com.snake.main.model.cell;
 
-public class Apple extends Cell {
+import com.snake.main.model.Snake;
+
+public class Apple extends Food {
 
     public Apple(int x, int y) {
         super(x, y);
-        isWalkable = true;
     }
+
+    @Override
+    public void makeEffect(Snake snake) {
+        snake.addPart();
+        snake.getField().hasApple = false;
+    }
+
 }
