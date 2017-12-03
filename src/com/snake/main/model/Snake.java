@@ -151,7 +151,7 @@ public class Snake {
     }
 
     public void reduce(){
-        
+
     }
 }
 
