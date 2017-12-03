@@ -37,6 +37,7 @@ public class Game {
         field = FieldGenerator.getInstance().generateMaze();
         snake = new Snake(field);
         field.addFood(Apple.class);
+        field.addFood(Reverser.class);
     }
 
     public Field getField() {
