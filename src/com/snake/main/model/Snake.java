@@ -113,10 +113,32 @@ public class Snake {
             throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
         tryAddVirtualPart();
-        for (int i=0; i<this.getLength(); i++)
-            moveSnakePart(snakeParts.get(i), i);
+        if (tryMoveSnakeHead((SnakeHead) snakeParts.get(0)))
+            for (int i=1; i<this.getLength(); i++)
+                moveSnakePart(snakeParts.get(i), i);
     }
 
+    private boolean tryMoveSnakeHead(SnakeHead head) throws NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
+        Directions direction = head.getDirection();
+        Cell targetCell = field.getNeighbor(head, direction);
+        if (!targetCell.isWalkable())
+            isDead = true;
+        else {
+            if (targetCell instanceof Food) {
+                ((Food) targetCell).makeEffect(this);
+                if (targetCell instanceof Reverser)
+                    return false;
+            }
+            field.setCellAt(head.getX(), head.getY(), new Empty(head.getX(), head.getY()));
+            head.setX(targetCell.getX());
+            head.setY(targetCell.getY());
+            field.setCellAt(targetCell.getX(), targetCell.getY(),head);
+        }
+        return true;
+    }
+
+    /*
     private void moveSnakePart(SnakePart part, int index)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Directions direction = part.getDirection();
@@ -134,6 +156,18 @@ public class Snake {
                 part.setDirection(getNeighborSide(part, snakeParts.get(index - 1)));
             field.setCellAt(targetCell.getX(), targetCell.getY(), part);
         }
+    }
+    */
+
+    private void moveSnakePart(SnakePart part, int index)
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        Directions direction = part.getDirection();
+        Cell targetCell = field.getNeighbor(part, direction);
+        field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
+        part.setX(targetCell.getX());
+        part.setY(targetCell.getY());
+        part.setDirection(getNeighborSide(part, snakeParts.get(index - 1)));
+        field.setCellAt(targetCell.getX(), targetCell.getY(), part);
     }
 
     private Directions getNeighborSide(SnakePart you, SnakePart neighbor){
@@ -175,6 +209,7 @@ public class Snake {
         }
     }
 
+    /*
     public void reverse(){
         SnakePart tail = this.snakeParts.get(this.snakeParts.size()-2);
         field.setCellAt(snakeHead.getX(), snakeHead.getY(), new SnakePart(snakeHead.getX(), snakeHead.getY()));
@@ -185,7 +220,49 @@ public class Snake {
             part.setDirection(null);
         }
         snakeParts = findSnake();
-        snakeHead = (SnakeHead)this.snakeParts.get(0);
+        snakeHead = (SnakeHead)snakeParts.get(0);
+    }
+    */
+
+    public void reverse(){
+        VirtualSnakePart virtSnakePart = (VirtualSnakePart)snakeParts.get(snakeParts.size()-1);
+        int virtX = virtSnakePart.getX();
+        int virtY = virtSnakePart.getY();
+        field.setCellAt(virtX, virtY, new Empty(virtX, virtY));
+        snakeParts.remove(snakeParts.size()-1);
+        snakeParts = reverseSnakeBody();
+        snakeHead = (SnakeHead)snakeParts.get(0);
+    }
+
+    private ArrayList<SnakePart> reverseSnakeBody(){
+        ArrayList<SnakePart> reversedSnake = new ArrayList<>();
+        for (int i=snakeParts.size()-1; i>=0; i--){
+            if (i == snakeParts.size()-1){
+                SnakePart tail = snakeParts.get(i);
+                SnakeHead head = new SnakeHead(tail.getX(), tail.getY());
+                head.setDirection(chooseDirection(head, tail.getDirection().opposite()));
+                head.setPosition(snakeParts.size()-i);
+                reversedSnake.add(head);
+            }
+            else{
+                SnakePart currentPart = snakeParts.get(i);
+                SnakePart newPart = new SnakePart(currentPart.getX(), currentPart.getY());
+                newPart.setDirection(getNeighborSide(newPart, snakeParts.get(i+1)));
+                newPart.setPosition(snakeParts.size()-i);
+                reversedSnake.add(newPart);
+            }
+        }
+        return reversedSnake;
+    }
+
+    private Directions chooseDirection(SnakePart snakePart, Directions oppositeDirection){
+        if (!field.getNeighbor(snakePart, oppositeDirection).isWalkable()) {
+            for (Directions direction : Directions.values())
+                if (field.getNeighbor(snakePart, direction).isWalkable())
+                    return direction;
+            return oppositeDirection;
+        }
+        return oppositeDirection;
     }
 
     public void reduce(){
