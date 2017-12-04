@@ -3,6 +3,7 @@ package com.snake.main.model;
 import com.snake.main.model.cell.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.server.RemoteServer;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -31,7 +32,9 @@ public class Snake {
         return snakeParts.size();
     }
 
-    public void changeHeadDirection(Directions direction){
+    public void tryChangeHeadDirection(Directions direction){
+        if (direction.isOpposite(snakeHead.getDirection()))
+            return;
         snakeHead.setDirection(direction);
     }
 
@@ -148,6 +151,9 @@ public class Snake {
         else {
             if (targetCell instanceof Food) {
                 ((Food) targetCell).makeEffect(this);
+            }
+            if (targetCell instanceof Exit) {
+                ((Exit)targetCell).use(this);
             }
             field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
             part.setX(targetCell.getX());

@@ -73,7 +73,7 @@ public class GameForm extends JPanel{
 
     private class RepaintAction implements ActionListener{
         public void actionPerformed(ActionEvent evt) {
-            game.getSnake().changeHeadDirection(nextSnakeDirection);
+            game.getSnake().tryChangeHeadDirection(nextSnakeDirection);
             try {
                 game.makeStep();
             } catch (Exception e) {
@@ -143,8 +143,6 @@ public class GameForm extends JPanel{
                 window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
             }
             if (direction == null)
-                return;
-            if (direction.isOpposite(game.getSnake().getSnakeDirection()))
                 return;
             nextSnakeDirection = direction;
         }
