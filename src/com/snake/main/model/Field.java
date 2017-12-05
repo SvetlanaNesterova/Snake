@@ -55,7 +55,6 @@ public class Field {
         field[i][j] = value;
     }
 
-
     public void addFood(Class<? extends Food> foodClass)
             throws NoSuchMethodException, IllegalAccessException,
             InvocationTargetException, InstantiationException {

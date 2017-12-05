@@ -1,7 +1,6 @@
 package com.snake.tests;
 
 import com.snake.main.model.Directions;
-import com.snake.main.model.Snake;
 import com.snake.main.model.cell.Empty;
 import com.snake.main.model.cell.SnakeHead;
 import com.snake.main.model.cell.SnakePart;

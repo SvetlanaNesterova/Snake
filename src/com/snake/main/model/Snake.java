@@ -10,6 +10,7 @@ import java.util.Objects;
 public class Snake {
     private ArrayList<SnakePart> snakeParts;
     private SnakeHead snakeHead;
+    private Directions toBody;
     private Field field;
     private boolean isDead;
     private int score = 0;
@@ -20,8 +21,9 @@ public class Snake {
 
     public Snake(Field field) {
         this.field = field;
-        this.snakeParts = findSnake();
-        this.snakeHead = (SnakeHead)this.snakeParts.get(0);
+        snakeParts = findSnake();
+        snakeHead = (SnakeHead)snakeParts.get(0);
+        toBody = snakeHead.getDirection().opposite();
     }
 
     public boolean isDead(){
@@ -33,7 +35,7 @@ public class Snake {
     }
 
     public void tryChangeHeadDirection(Directions direction){
-        if (direction.isOpposite(snakeHead.getDirection()))
+        if (direction == toBody)
             return;
         snakeHead.setDirection(direction);
     }
@@ -109,6 +111,7 @@ public class Snake {
                 speed == SnakeSpeed.Normal && ticksMod6 % 3 == 0 ||
                 speed == SnakeSpeed.Fast && ticksMod6 % 2 == 0) {
             move();
+            toBody = snakeHead.getDirection().opposite();
         }
     }
 
@@ -289,6 +292,10 @@ public class Snake {
 
     public void changeEatenApples(int delta) {
         eatenApples += delta;
+    }
+
+    public SnakeSpeed getSpeed() {
+        return speed;
     }
 }
 
