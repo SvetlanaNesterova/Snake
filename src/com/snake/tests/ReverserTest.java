@@ -1,13 +1,13 @@
 package com.snake.tests;
 
 import com.snake.main.model.Game;
-import com.snake.main.model.Snake;
 import com.snake.main.model.Vector;
 import com.snake.main.model.cell.Reverser;
 import com.snake.main.model.cell.SnakeHead;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -39,13 +39,19 @@ public class ReverserTest {
     void testReverse() throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
         putSnakeAndItem();
+        SnakeHead oldHead = TestHelper.findSnakeHead(game.getField());
         TestHelper.makeMove(game);
+        TestHelper.makeMove(game);
+        SnakeHead head = TestHelper.findSnakeHead(game.getField());
+        assertFalse(head.getX() == oldHead.getX() && head.getY() == oldHead.getY());
+        assertNotEquals(head.getDirection(), oldHead.getDirection());
     }
 
     @Test
     void testReverserAppearsAfterEating() throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
         putSnakeAndItem();
+        TestHelper.makeMove(game);
         TestHelper.makeMove(game);
         Reverser ret = TestHelper.findReverser(game.getField());
         assertNotNull(ret);
