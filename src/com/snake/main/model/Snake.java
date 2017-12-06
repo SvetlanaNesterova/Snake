@@ -234,11 +234,13 @@ public class Snake {
     */
 
     public void reverse(){
-        VirtualSnakePart virtSnakePart = (VirtualSnakePart)snakeParts.get(snakeParts.size()-1);
-        int virtX = virtSnakePart.getX();
-        int virtY = virtSnakePart.getY();
-        field.setCellAt(virtX, virtY, new Empty(virtX, virtY));
-        snakeParts.remove(snakeParts.size()-1);
+        if (snakeParts.get(snakeParts.size()-1) instanceof VirtualSnakePart) {
+            VirtualSnakePart virtSnakePart = (VirtualSnakePart) snakeParts.get(snakeParts.size() - 1);
+            int virtX = virtSnakePart.getX();
+            int virtY = virtSnakePart.getY();
+            field.setCellAt(virtX, virtY, new Empty(virtX, virtY));
+            snakeParts.remove(snakeParts.size()-1);
+        }
         snakeParts = reverseSnakeBody();
         snakeHead = (SnakeHead)snakeParts.get(0);
     }

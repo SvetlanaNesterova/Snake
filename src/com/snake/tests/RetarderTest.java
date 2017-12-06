@@ -17,20 +17,20 @@ public class RetarderTest {
 
     void putSnakeAndItem() throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
-        game = new Game();
+        game = Game.getNewInstance();
         Retarder retarder = TestHelper.findRetarder(game.getField());
         SnakeHead head = TestHelper.findSnakeHead(game.getField());
         game.getField().removeFood(retarder);
         Vector dir = head.getDirection().getVector();
-        int x = head.getX() + dir.getX();
-        int y = head.getY() + dir.getY();
+        int x = (head.getX() + dir.getX()) % game.getField().getWidth();
+        int y = (head.getY() + dir.getY()) % game.getField().getHeight();
         game.getField().setCellAt(x, y, new Retarder(x, y));
     }
 
     @Test
     void testRetarderAppearsFirstTime() throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
-        Game game = new Game();
+        Game game = Game.getNewInstance();
         Retarder ret = TestHelper.findRetarder(game.getField());
         assertNotNull(ret);
     }

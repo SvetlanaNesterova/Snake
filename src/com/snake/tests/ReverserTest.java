@@ -17,7 +17,7 @@ public class ReverserTest {
 
     void putSnakeAndItem() throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
-        game = new Game();
+        game = Game.getNewInstance();
         Reverser Reverser = TestHelper.findReverser(game.getField());
         SnakeHead head = TestHelper.findSnakeHead(game.getField());
         game.getField().removeFood(Reverser);
@@ -30,7 +30,7 @@ public class ReverserTest {
     @Test
     void testReverserAppearsFirstTime() throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
-        Game game = new Game();
+        Game game = Game.getNewInstance();
         Reverser ret = TestHelper.findReverser(game.getField());
         assertNotNull(ret);
     }

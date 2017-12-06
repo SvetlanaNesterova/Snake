@@ -11,6 +11,7 @@ public class Field {
     private Cell[][] field;
     private int height;
     private int width;
+    //убрать
     public boolean hasApple = true;
     public Apple apple;
 

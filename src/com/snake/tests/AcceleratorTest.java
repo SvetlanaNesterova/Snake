@@ -17,7 +17,7 @@ public class AcceleratorTest {
 
     void putSnakeAndItem() throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
-        game = new Game();
+        game = Game.getNewInstance();
         Accelerator Accelerator = TestHelper.findAccelerator(game.getField());
         SnakeHead head = TestHelper.findSnakeHead(game.getField());
         game.getField().removeFood(Accelerator);
@@ -30,7 +30,7 @@ public class AcceleratorTest {
     @Test
     void testAcceleratorAppearsFirstTime() throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
-        Game game = new Game();
+        Game game = Game.getNewInstance();
         Accelerator ret = TestHelper.findAccelerator(game.getField());
         assertNotNull(ret);
     }
