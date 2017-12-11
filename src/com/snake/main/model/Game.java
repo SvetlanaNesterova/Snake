@@ -1,86 +1,60 @@
 package com.snake.main.model;
 
-import com.snake.main.model.Directions;
-import com.snake.main.model.Field;
-import com.snake.main.model.Snake;
 import com.snake.main.model.cell.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
     private Field field;
     private Snake snake;
-    private Apple apple;
     private boolean isOver;
-    private int score;
-    private int ticks;
-    public final static int TICKS_TO_ROT = 25;
+    public final static int APPLES_TO_NEXT_LEVEL = 100;
 
-    public Game(){
+    private static Game instance;
+
+    private Game() throws NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
         createNewLevel();
     }
 
-    public void makeStep(){
+    public static Game getInstance() throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
+        if (instance==null){
+            instance = new Game();
+        }
+        return instance;
+    }
+
+    public static Game getNewInstance() throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
+        instance = new Game();
+        return instance;
+    }
+
+    public void makeStep() throws NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
         snake.makeMove();
         isOver = snake.isDead();
-        if (!field.hasApple) {
-            addApple();
-            score++;
-            ticks = 0;
-        }
-        if (ticks > TICKS_TO_ROT) {
-            ticks = 0;
-            removeApple();
-            addApple();
-        }
-        ticks++;
+        field.apple.increaseTicks();
     }
 
-    private void addApple() {
-        Random random = new Random();
-        int x = 0, y = 0;
-        while (!(field.cellAt(x, y) instanceof Empty)) {
-            x = random.nextInt(field.getWidth());
-            y = random.nextInt(field.getHeight());
-        }
-        field.setCellAt(x, y, new Apple(x, y));
-        apple = (Apple) field.cellAt(x, y);
-        field.hasApple = true;
-    }
-
-    private void removeApple() {
-        int x = apple.getX();
-        int y = apple.getY();
-        field.setCellAt(x, y, new Empty(x, y));
-        score--;
-    }
-
-    public void createNewLevel() {
-        int gameSize = 20;
-        Cell[][] cells = new Cell[gameSize][gameSize];
-        for (int i=0; i<gameSize; i++){
-            for (int j=0; j<gameSize; j++) {
-                cells[i][j] = new Empty(i, j);
-                if (i == 0 || j == 0 || i == gameSize - 1 || j == gameSize - 1)
-                    cells[i][j] = new Wall(i, j);
-            }
-        }
-        Random random = new Random();
-        int x = 0, y = 0;
-        while (!(cells[x][y] instanceof Empty)) {
-            x = random.nextInt(gameSize - gameSize / 2) + gameSize / 4;
-            y = random.nextInt(gameSize - gameSize / 2) + gameSize / 4;
-        }
-        SnakeHead head = new SnakeHead(x, y);
-        head.setDirection(Directions.random());
-        cells[x][y] = head;
-        int dx = head.getDirection().getVector().getX();
-        int dy = head.getDirection().getVector().getY();
-        cells[x+dx][y+dy] = new SnakePart(x+dx, y+dy);
-        cells[x+2*dx][y+2*dy] = new SnakePart(x+2*dx, y+2*dy);
-        field = new Field(cells);
+    public void createNewLevel()
+            throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
+        field = FieldGenerator.getInstance().generateMaze();
         snake = new Snake(field);
-        addApple();
+        addFoods();
+    }
+
+    private void addFoods()
+            throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
+        field.addFood(Apple.class);
+        field.addFood(Accelerator.class);
+        field.addFood(Retarder.class);
+        field.addFood(Reverser.class);
     }
 
     public Field getField() {
@@ -91,11 +65,20 @@ public class Game {
         return snake;
     }
 
-    public int getTicks() { return ticks; }
-
     public boolean isOver() {
         return isOver;
     }
 
-    public int getScore() { return score; }
+    public int getTicks() {
+        return field.apple.getTicks();
+    }
+
+    public int getScore() {
+        return snake.getScore();
+    }
+
+    public int getEatenApples() {
+        return snake.getEatenApples();
+    }
+
 }

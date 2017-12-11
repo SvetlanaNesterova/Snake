@@ -1,9 +1,11 @@
 package com.snake.main;
 
 import com.snake.main.model.Game;
+import com.snake.main.model.cell.Apple;
 import com.snake.main.model.cell.Cell;
 import com.snake.main.model.cell.SnakePart;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Painter {
@@ -18,6 +20,11 @@ public class Painter {
     private final static Color APPLE_ROTTEN_COLOR = new Color(0x3E1E0D);
     private final static Color WALL_COLOR = new Color(0x023A4F);
     private final static Color ERROR_COLOR = new Color(0xFF07E6);
+
+    private final static Image REVERSER_IMAGE = new ImageIcon("src\\com\\snake\\assets\\reverser.png").getImage();
+    private final static Image ACCELERATOR_IMAGE = new ImageIcon("src\\com\\snake\\assets\\accelerator.png").getImage();
+    private final static Image RETARDER_IMAGE = new ImageIcon("src\\com\\snake\\assets\\retarder.png").getImage();
+
 
     private Game game;
 
@@ -54,6 +61,22 @@ public class Painter {
         drawCell(g2, cell, ERROR_COLOR);
     }
 
+    public void paintReverser(Cell cell, Graphics2D g2){
+        drawImage(cell, g2, REVERSER_IMAGE);
+    }
+
+    public void paintAccelerator(Cell cell, Graphics2D g2){
+        drawImage(cell, g2, ACCELERATOR_IMAGE);
+    }
+
+    public void paintRetarder(Cell cell, Graphics2D g2){
+        drawImage(cell, g2, RETARDER_IMAGE);
+    }
+
+    private static void drawImage(Cell cell, Graphics2D g2, Image img){
+        g2.drawImage(img, CELL_SIZE*cell.getX()+BORDER, CELL_SIZE*cell.getY()+BORDER, CELL_SIZE-BORDER, CELL_SIZE-BORDER, null);
+    }
+
     private static void drawCell(Graphics2D g2, Cell cell, Color color) {
         g2.setColor(color);
         g2.fillRect(CELL_SIZE*cell.getX()+BORDER, CELL_SIZE*cell.getY()+BORDER,
@@ -74,7 +97,7 @@ public class Painter {
     }
 
     public Color getAppleColor() {
-        final int ticksCount = Game.TICKS_TO_ROT;
+        final int ticksCount = Apple.TICKS_TO_ROT;
         float[] rottenColors = new float[3];
         float[] normalColors = new float[3];
         APPLE_COLOR.getRGBColorComponents(normalColors);
