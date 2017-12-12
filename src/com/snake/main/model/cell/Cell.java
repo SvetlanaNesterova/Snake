@@ -1,6 +1,8 @@
 package com.snake.main.model.cell;
 
-public abstract class Cell {
+import java.io.Serializable;
+
+public abstract class Cell implements Serializable {
     protected int x;
     protected int y;
     protected boolean isWalkable;

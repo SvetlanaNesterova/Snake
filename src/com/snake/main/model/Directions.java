@@ -1,8 +1,9 @@
 package com.snake.main.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public enum Directions {
+public enum Directions implements Serializable {
     Up(new Vector(0, -1)),
     Down(new Vector(0, 1)),
     Left(new Vector(-1, 0)),

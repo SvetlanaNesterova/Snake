@@ -2,12 +2,13 @@ package com.snake.main.model;
 
 import com.snake.main.model.cell.*;
 
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Field {
+public class Field implements Serializable {
     private Cell[][] field;
     private int height;
     private int width;

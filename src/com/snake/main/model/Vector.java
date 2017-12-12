@@ -1,6 +1,8 @@
 package com.snake.main.model;
 
-public final class Vector {
+import java.io.Serializable;
+
+public final class Vector implements Serializable {
     private final int x;
     private final int y;
 

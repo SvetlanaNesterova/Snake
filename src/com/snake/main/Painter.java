@@ -10,9 +10,10 @@ import java.awt.*;
 
 public class Painter {
     private final static int CELL_SIZE = 30;
-    private final static int BORDER = 0;
+    private final static int HEAD_SIZE = 25;
+    private final static int BORDER = 4;
 
-    private final static Color SNAKE_COLOR = new Color(45,219,22);
+    private final static Color SNAKE_COLOR = new Color(45, 219, 22);
     private final static Color SNAKE_HEAD_COLOR = new Color(0x26AB84);
     private final static Color BACKGROUND_COLOR1 = new Color(0xD9D2FF);
     private final static Color BACKGROUND_COLOR2 = new Color(0xD3CBF0);
@@ -26,10 +27,10 @@ public class Painter {
     private final static Image RETARDER_IMAGE = new ImageIcon("src\\com\\snake\\assets\\retarder.png").getImage();
 
 
-    private Game game;
+    private GameForm form;
 
-    public Painter(Game game) {
-        this.game = game;
+    public Painter(GameForm form) {
+        this.form = form;
     }
 
     public void paintSnakePart(Cell cell, Graphics2D g2) {
@@ -61,51 +62,62 @@ public class Painter {
         drawCell(g2, cell, ERROR_COLOR);
     }
 
-    public void paintReverser(Cell cell, Graphics2D g2){
+    public void paintReverser(Cell cell, Graphics2D g2) {
         drawImage(cell, g2, REVERSER_IMAGE);
     }
 
-    public void paintAccelerator(Cell cell, Graphics2D g2){
+    public void paintAccelerator(Cell cell, Graphics2D g2) {
         drawImage(cell, g2, ACCELERATOR_IMAGE);
     }
 
-    public void paintRetarder(Cell cell, Graphics2D g2){
+    public void paintRetarder(Cell cell, Graphics2D g2) {
         drawImage(cell, g2, RETARDER_IMAGE);
     }
 
-    private static void drawImage(Cell cell, Graphics2D g2, Image img){
-        g2.drawImage(img, CELL_SIZE*cell.getX()+BORDER, CELL_SIZE*cell.getY()+BORDER, CELL_SIZE-BORDER, CELL_SIZE-BORDER, null);
+    private static void drawImage(Cell cell, Graphics2D g2, Image img) {
+        g2.drawImage(img, CELL_SIZE * cell.getX() + BORDER,
+                CELL_SIZE * cell.getY() + BORDER + HEAD_SIZE,
+                CELL_SIZE - BORDER, CELL_SIZE - BORDER, null);
     }
 
     private static void drawCell(Graphics2D g2, Cell cell, Color color) {
         g2.setColor(color);
-        g2.fillRect(CELL_SIZE*cell.getX()+BORDER, CELL_SIZE*cell.getY()+BORDER,
-                CELL_SIZE-BORDER, CELL_SIZE-BORDER);
+        g2.fillRect(CELL_SIZE * cell.getX() + BORDER,
+                CELL_SIZE * cell.getY() + BORDER + HEAD_SIZE,
+                CELL_SIZE - BORDER, CELL_SIZE - BORDER);
     }
 
-    public Color getSnakeColor(SnakePart snakePart) {
+    private Color getSnakeColor(SnakePart snakePart) {
         int position = snakePart.getPosition();
         float[] headColors = new float[3];
         float[] tailColors = new float[3];
         SNAKE_COLOR.getRGBColorComponents(tailColors);
         SNAKE_HEAD_COLOR.getRGBColorComponents(headColors);
         return new Color(
-                (tailColors[0] - headColors[0]) / game.getSnake().getLength() * position + headColors[0],
-                (tailColors[1] - headColors[1]) / game.getSnake().getLength() * position + headColors[1],
-                (tailColors[2] - headColors[2]) / game.getSnake().getLength() * position + headColors[2]
+                (tailColors[0] - headColors[0]) / form.getGame().getSnake().getLength() * position + headColors[0],
+                (tailColors[1] - headColors[1]) / form.getGame().getSnake().getLength() * position + headColors[1],
+                (tailColors[2] - headColors[2]) / form.getGame().getSnake().getLength() * position + headColors[2]
         );
     }
 
-    public Color getAppleColor() {
+    private Color getAppleColor() {
         final int ticksCount = Apple.TICKS_TO_ROT;
         float[] rottenColors = new float[3];
         float[] normalColors = new float[3];
         APPLE_COLOR.getRGBColorComponents(normalColors);
         APPLE_ROTTEN_COLOR.getRGBColorComponents(rottenColors);
-        return new Color(
-                (rottenColors[0] - normalColors[0]) / ticksCount * game.getTicks() + normalColors[0],
-                (rottenColors[1] - normalColors[1]) / ticksCount * game.getTicks() + normalColors[1],
-                (rottenColors[2] - normalColors[2]) / ticksCount * game.getTicks() + normalColors[2]
-        );
+        try {
+            return new Color(
+                    (rottenColors[0] - normalColors[0]) /
+                            ticksCount * form.getGame().getTicks() + normalColors[0],
+                    (rottenColors[1] - normalColors[1]) /
+                            ticksCount * form.getGame().getTicks() + normalColors[1],
+                    (rottenColors[2] - normalColors[2]) /
+                            ticksCount * form.getGame().getTicks() + normalColors[2]
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

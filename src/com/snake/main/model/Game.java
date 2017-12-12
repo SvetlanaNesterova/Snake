@@ -2,11 +2,12 @@ package com.snake.main.model;
 
 import com.snake.main.model.cell.*;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Random;
 
-public class Game {
+public class Game implements Serializable {
     private Field field;
     private Snake snake;
     private boolean isOver;
@@ -33,7 +34,12 @@ public class Game {
         return instance;
     }
 
-    public void makeStep() throws NoSuchMethodException, InstantiationException,
+    private void readObject(ObjectInputStream in) throws IOException,
+            ClassNotFoundException {
+        in.defaultReadObject();
+        instance = this;
+    }
+     public void makeStep() throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, InvocationTargetException {
         snake.makeMove();
         isOver = snake.isDead();

@@ -2,12 +2,13 @@ package com.snake.main.model;
 
 import com.snake.main.model.cell.*;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.server.RemoteServer;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Snake {
+public class Snake implements Serializable {
     private ArrayList<SnakePart> snakeParts;
     private SnakeHead snakeHead;
     private Directions toBody;
@@ -58,8 +59,8 @@ public class Snake {
     }
 
     private SnakeHead findSnakeHead(){
-        for (int i=0; i<field.getWidth(); i++){
-            for (int j=0; j<field.getHeight(); j++)
+        for (int i = 0; i < field.getWidth(); i++){
+            for (int j = 0; j < field.getHeight(); j++)
                 if (field.cellAt(i, j) instanceof SnakeHead)
                     return (SnakeHead) field.cellAt(i, j);
         }
@@ -120,7 +121,7 @@ public class Snake {
             InstantiationException, IllegalAccessException {
         tryAddVirtualPart();
         if (tryMoveSnakeHead((SnakeHead) snakeParts.get(0)))
-            for (int i=1; i<this.getLength(); i++)
+            for (int i = 1; i < this.getLength(); i++)
                 moveSnakePart(snakeParts.get(i), i);
     }
 
@@ -143,30 +144,6 @@ public class Snake {
         }
         return true;
     }
-
-    /*
-    private void moveSnakePart(SnakePart part, int index)
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        Directions direction = part.getDirection();
-        Cell targetCell = field.getNeighbor(part, direction);
-        if (!targetCell.isWalkable())
-            isDead = true;
-        else {
-            if (targetCell instanceof Food) {
-                ((Food) targetCell).makeEffect(this);
-            }
-            if (targetCell instanceof Exit) {
-                ((Exit)targetCell).use(this);
-            }
-            field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
-            part.setX(targetCell.getX());
-            part.setY(targetCell.getY());
-            if (index!=0)
-                part.setDirection(getNeighborSide(part, snakeParts.get(index - 1)));
-            field.setCellAt(targetCell.getX(), targetCell.getY(), part);
-        }
-    }
-    */
 
     private void moveSnakePart(SnakePart part, int index)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -218,21 +195,6 @@ public class Snake {
         }
     }
 
-    /*
-    public void reverse(){
-        SnakePart tail = this.snakeParts.get(this.snakeParts.size()-2);
-        field.setCellAt(snakeHead.getX(), snakeHead.getY(), new SnakePart(snakeHead.getX(), snakeHead.getY()));
-        field.setCellAt(tail.getX(), tail.getY(), new SnakeHead(tail.getX(), tail.getY()));
-        for (SnakePart part : snakeParts) {
-            if (part instanceof VirtualSnakePart)
-                field.setCellAt(part.getX(), part.getY(), new Empty(part.getX(), part.getY()));
-            part.setDirection(null);
-        }
-        snakeParts = findSnake();
-        snakeHead = (SnakeHead)snakeParts.get(0);
-    }
-    */
-
     public void reverse(){
         if (snakeParts.get(snakeParts.size()-1) instanceof VirtualSnakePart) {
             VirtualSnakePart virtSnakePart = (VirtualSnakePart) snakeParts.get(snakeParts.size() - 1);
@@ -274,10 +236,6 @@ public class Snake {
             return oppositeDirection;
         }
         return oppositeDirection;
-    }
-
-    public void reduce(){
-
     }
 
     public int getScore(){
